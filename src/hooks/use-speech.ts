@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  detectLanguageFromText,
-  shouldRetryWithLocale,
-} from "@/lib/language-detect";
+import { evaluateTranscriptLanguage } from "@/lib/gemini";
 
 type Recognition = {
   start: () => void;
@@ -144,38 +141,51 @@ export function useSpeech() {
     (
       onDone: (text: string, detectedLangCode: string) => void,
       fallbackText: string,
-      initialLocale = "hi-IN",
+      initialLocale = "hi-IN", // Unused now, but kept for signature compatibility
     ) => {
       setTranscript("");
       setListening(true);
 
-      recognizeWithLocale(
-        initialLocale,
-        (firstTranscript) => {
-          const detection = detectLanguageFromText(firstTranscript);
-          const retryLocale = shouldRetryWithLocale(firstTranscript, initialLocale);
+      const locales = ["hi-IN", "mr-IN", "en-IN"];
+      const results: { transcript: string; status: string; locale: string }[] = [];
 
-          if (retryLocale && retryLocale !== initialLocale) {
-            console.log(`[LANG-DEBUG] Locale mismatch detected. Retrying with "${retryLocale}"`);
-            setTranscript("");
-            setListening(true);
+      const attempt = async (index: number) => {
+        if (index >= locales.length) {
+          // All attempts failed (all gibberish or empty). Fall back to the longest transcript.
+          const best = results.reduce(
+            (prev, curr) => (curr.transcript.length > prev.transcript.length ? curr : prev),
+            results[0]
+          );
+          console.log(`[LANG-DEBUG] All retries exhausted. Falling back to longest transcript from "${best.locale}"`);
+          onDone(best.transcript, best.locale);
+          return;
+        }
 
-            recognizeWithLocale(
-              retryLocale,
-              (retryTranscript) => {
-                const retryDetection = detectLanguageFromText(retryTranscript);
-                onDone(retryTranscript, retryDetection.langCode);
-              },
-              fallbackText,
-              8000,
-            );
-          } else {
-            onDone(firstTranscript, detection.langCode);
-          }
-        },
-        fallbackText,
-        8000,
-      );
+        const locale = locales[index];
+
+        recognizeWithLocale(
+          locale,
+          async (text) => {
+            const status = await evaluateTranscriptLanguage(text);
+            console.log(`[LANG-DEBUG] Attempt ${index + 1}: tried "${locale}", got: "${text}", Gemini says: ${status}`);
+
+            results.push({ transcript: text, status, locale });
+
+            if (status === "GIBBERISH") {
+              setTranscript("");
+              setListening(true);
+              attempt(index + 1);
+            } else {
+              // Found a coherent transcript
+              onDone(text, locale);
+            }
+          },
+          fallbackText,
+          8000,
+        );
+      };
+
+      attempt(0);
     },
     [recognizeWithLocale],
   );

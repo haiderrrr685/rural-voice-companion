@@ -91,6 +91,27 @@ export async function classifyIntent(message: string, signal?: AbortSignal): Pro
   return "general";
 }
 
+// ─── Transcript Evaluation ─────────────────────────────────────────
+
+const TRANSCRIPT_EVAL_SYSTEM = `You are a language detection engine. The user has spoken a sentence. 
+Analyze the following transcript and determine if it is coherent Hindi, Marathi, English, or if it is Gibberish/Mismatched (e.g., Marathi words forced into Hindi phonetics, or nonsensical).
+Reply with ONLY ONE WORD from this list: HINDI, MARATHI, ENGLISH, GIBBERISH. No other text.`;
+
+export type TranscriptStatus = "HINDI" | "MARATHI" | "ENGLISH" | "GIBBERISH";
+
+export async function evaluateTranscriptLanguage(transcript: string, signal?: AbortSignal): Promise<TranscriptStatus> {
+  try {
+    const result = await callGemini(transcript, TRANSCRIPT_EVAL_SYSTEM, ROUTER_MODEL, 0.1, 10, signal);
+    const upper = result.trim().toUpperCase();
+    if (upper.includes("HINDI")) return "HINDI";
+    if (upper.includes("MARATHI")) return "MARATHI";
+    if (upper.includes("ENGLISH")) return "ENGLISH";
+    return "GIBBERISH";
+  } catch {
+    return "GIBBERISH";
+  }
+}
+
 // ─── Agent Response ────────────────────────────────────────────────
 
 const AGENT_SYSTEMS: Record<AgentCategory, string> = {
