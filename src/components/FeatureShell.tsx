@@ -51,7 +51,7 @@ export function FeatureShell({
           onClick={() => openChat()}
           className="flex items-center gap-3 rounded-full bg-card/80 py-2 pl-2 pr-5 shadow-float backdrop-blur-xl"
         >
-          <Orb size={38} />
+          <Orb size={38} interactive={false} />
           <span className="text-sm font-medium">Ask anything</span>
         </button>
       </motion.div>

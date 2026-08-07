@@ -57,7 +57,7 @@ export function ChatSheet() {
           transition={{ type: "spring", stiffness: 260, damping: 30 }}
         >
           <header className="flex items-center gap-3 px-5 pb-3 pt-6">
-            <Orb size={40} active={typing || listening} />
+            <Orb size={40} active={typing || listening} interactive={false} />
             <div className="flex-1">
               <p className="text-sm font-semibold">Rural AI</p>
               <p className="text-xs text-muted-foreground">
