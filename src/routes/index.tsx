@@ -60,7 +60,7 @@ function Index() {
             {greetings.map((g, i) => {
               const x = 50 + Math.cos(g.angle) * g.radius * 46;
               const y = 50 + Math.sin(g.angle) * g.radius * 44;
-              const opacity = Math.max(0.08, 0.95 - g.radius * 0.95);
+              const opacity = Math.max(0.12, 1.2 - g.radius * 1.1);
               return (
                 <motion.span
                   key={`${g.text}-${i}`}
