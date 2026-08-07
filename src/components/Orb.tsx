@@ -4,16 +4,21 @@ export function Orb({
   size = 220,
   active = false,
   onClick,
+  interactive = true,
 }: {
   size?: number;
   active?: boolean;
   onClick?: () => void;
+  /** Set false when the orb is rendered inside another button/link. */
+  interactive?: boolean;
 }) {
+  const Root = interactive ? motion.button : motion.div;
+
   return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      aria-label="Talk to the assistant"
+    <Root
+      {...(interactive
+        ? { type: "button" as const, onClick, "aria-label": "Talk to the assistant" }
+        : { "aria-hidden": true })}
       className="relative grid place-items-center rounded-full outline-none"
       style={{ width: size, height: size }}
       animate={{ scale: active ? [1, 1.06, 1] : [0.98, 1.02, 0.98] }}
@@ -22,7 +27,7 @@ export function Orb({
         repeat: Infinity,
         ease: "easeInOut",
       }}
-      whileTap={{ scale: 0.94 }}
+      whileTap={interactive ? { scale: 0.94 } : undefined}
     >
       <span
         className="absolute inset-[-28%] rounded-full opacity-70 blur-2xl"
@@ -42,24 +47,28 @@ export function Orb({
         transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
       >
         {[0, 36, 72, 108, 144].map((r, i) => (
-          <motion.ellipse
+          <motion.g
             key={r}
-            cx="50"
-            cy="50"
-            rx="38"
-            ry="16"
-            fill="none"
-            stroke="var(--accent-line)"
-            strokeWidth={1.1}
-            opacity={0.55 - i * 0.06}
-            transform={`rotate(${r} 50 50)`}
-            animate={{ ry: [16, 26, 16] }}
+            style={{ transformOrigin: "50px 50px" }}
+            animate={{ scaleY: [1, 1.5, 1] }}
             transition={{
               duration: 7 + i,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-          />
+          >
+            <ellipse
+              cx="50"
+              cy="50"
+              rx="38"
+              ry="16"
+              fill="none"
+              stroke="var(--accent-line)"
+              strokeWidth={1.1}
+              opacity={0.55 - i * 0.06}
+              transform={`rotate(${r} 50 50)`}
+            />
+          </motion.g>
         ))}
       </motion.svg>
       <span
@@ -72,6 +81,6 @@ export function Orb({
           background: "var(--gradient-sheen)",
         }}
       />
-    </motion.button>
+    </Root>
   );
 }
