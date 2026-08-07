@@ -48,8 +48,8 @@ const raw: Array<[string, string]> = [
 export const greetings: Greeting[] = raw.map(([text, lang], i) => {
   const golden = 2.399963;
   const angle = i * golden;
-  const radius = 0.34 + 0.66 * Math.sqrt((i + 3) / (raw.length + 3));
-  return { text, lang, angle, radius };
+  const radius = 0.52 + 0.48 * Math.sqrt((i + 2) / (raw.length + 2));
+  return { text: text as string, lang: lang as string, angle, radius };
 });
 
 export type Feature = {
