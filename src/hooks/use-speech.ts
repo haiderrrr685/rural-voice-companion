@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  detectLanguageFromText,
+  shouldRetryWithLocale,
+} from "@/lib/language-detect";
 
 type Recognition = {
   start: () => void;
   stop: () => void;
+  abort: () => void;
   lang: string;
   continuous: boolean;
   interimResults: boolean;
   onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
   onend: (() => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((e: { error: string }) => void) | null;
 };
 
 function getRecognitionCtor(): (new () => Recognition) | null {
@@ -17,10 +22,6 @@ function getRecognitionCtor(): (new () => Recognition) | null {
   return w["SpeechRecognition"] ?? w["webkitSpeechRecognition"] ?? null;
 }
 
-/**
- * Speech recognition with a graceful simulated fallback so the prototype
- * always works, even in browsers without the Web Speech API.
- */
 export function useSpeech() {
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
@@ -32,70 +33,152 @@ export function useSpeech() {
     setSupported(Boolean(getRecognitionCtor()));
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      recRef.current?.stop();
+      try {
+        recRef.current?.stop();
+      } catch {
+        /* ignore */
+      }
     };
   }, []);
 
   const stop = useCallback(() => {
-    recRef.current?.stop();
+    try {
+      recRef.current?.stop();
+    } catch {
+      /* ignore */
+    }
     if (timerRef.current) clearTimeout(timerRef.current);
     setListening(false);
   }, []);
 
-  const listen = useCallback((onDone: (text: string) => void, fallbackText: string) => {
-    const Ctor = getRecognitionCtor();
-    setTranscript("");
-    setListening(true);
+  const recognizeWithLocale = useCallback(
+    (
+      locale: string,
+      onResult: (text: string) => void,
+      fallbackText: string,
+      timeoutMs = 8000,
+    ) => {
+      const Ctor = getRecognitionCtor();
+      if (!Ctor) {
+        // Simulated fallback for dev environments without SpeechRecognition
+        timerRef.current = setTimeout(() => {
+          setListening(false);
+          setTranscript(fallbackText);
+          onResult(fallbackText);
+        }, 2200);
+        return;
+      }
 
-    if (!Ctor) {
-      timerRef.current = setTimeout(() => {
+      const rec = new Ctor();
+      recRef.current = rec;
+      rec.lang = locale;
+      rec.continuous = false;
+      rec.interimResults = true;
+
+      // ──── DEBUG LOG 1: SpeechRecognition .lang ────
+      console.log(`[LANG-DEBUG] SpeechRecognition instantiated with .lang="${rec.lang}"`);
+
+      let final = "";
+      let settled = false;
+
+      const finish = (text: string) => {
+        if (settled) return;
+        settled = true;
+        if (timerRef.current) clearTimeout(timerRef.current);
         setListening(false);
-        setTranscript(fallbackText);
-        onDone(fallbackText);
-      }, 2200);
-      return;
-    }
+        setTranscript(text);
+        onResult(text);
+      };
 
-    const rec = new Ctor();
-    recRef.current = rec;
-    rec.lang = "en-IN";
-    rec.continuous = false;
-    rec.interimResults = true;
-    let final = "";
-    let settled = false;
-    const finish = (text: string) => {
-      if (settled) return;
-      settled = true;
-      if (timerRef.current) clearTimeout(timerRef.current);
-      setListening(false);
-      setTranscript(text);
-      onDone(text);
-    };
-    rec.onresult = (e) => {
-      let text = "";
-      for (let i = 0; i < e.results.length; i++) {
-        text += e.results[i]?.[0]?.transcript ?? "";
-      }
-      final = text;
-      setTranscript(text);
-    };
-    rec.onerror = () => finish(fallbackText);
-    rec.onend = () => finish(final.trim() || fallbackText);
-    // Safety net: never leave the prototype stuck in "Listening…".
-    timerRef.current = setTimeout(() => {
+      rec.onresult = (e) => {
+        let text = "";
+        for (let i = 0; i < e.results.length; i++) {
+          text += e.results[i]?.[0]?.transcript ?? "";
+        }
+        final = text;
+        setTranscript(text);
+      };
+
+      rec.onerror = (e) => {
+        if (e.error === "no-speech" || e.error === "aborted") {
+          finish(final.trim() || fallbackText);
+        } else {
+          finish(fallbackText);
+        }
+      };
+
+      rec.onend = () => finish(final.trim() || fallbackText);
+
+      timerRef.current = setTimeout(() => {
+        try {
+          rec.stop();
+        } catch {
+          /* ignore */
+        }
+        finish(final.trim() || fallbackText);
+      }, timeoutMs);
+
       try {
-        rec.stop();
+        rec.start();
       } catch {
-        /* ignore */
+        finish(fallbackText);
       }
-      finish(final.trim() || fallbackText);
-    }, 4000);
-    try {
-      rec.start();
-    } catch {
-      finish(fallbackText);
-    }
-  }, []);
+    },
+    [],
+  );
 
-  return { listen, stop, listening, transcript, supported };
+  const listen = useCallback(
+    (
+      onDone: (text: string) => void,
+      fallbackText: string,
+      locale = "hi-IN",
+    ) => {
+      setTranscript("");
+      setListening(true);
+      recognizeWithLocale(locale, onDone, fallbackText);
+    },
+    [recognizeWithLocale],
+  );
+
+  const listenAndDetect = useCallback(
+    (
+      onDone: (text: string, detectedLangCode: string) => void,
+      fallbackText: string,
+      initialLocale = "hi-IN",
+    ) => {
+      setTranscript("");
+      setListening(true);
+
+      recognizeWithLocale(
+        initialLocale,
+        (firstTranscript) => {
+          const detection = detectLanguageFromText(firstTranscript);
+          const retryLocale = shouldRetryWithLocale(firstTranscript, initialLocale);
+
+          if (retryLocale && retryLocale !== initialLocale) {
+            console.log(`[LANG-DEBUG] Locale mismatch detected. Retrying with "${retryLocale}"`);
+            setTranscript("");
+            setListening(true);
+
+            recognizeWithLocale(
+              retryLocale,
+              (retryTranscript) => {
+                const retryDetection = detectLanguageFromText(retryTranscript);
+                onDone(retryTranscript, retryDetection.langCode);
+              },
+              fallbackText,
+              8000,
+            );
+          } else {
+            onDone(firstTranscript, detection.langCode);
+          }
+        },
+        fallbackText,
+        8000,
+      );
+    },
+    [recognizeWithLocale],
+  );
+
+  return { listen, listenAndDetect, stop, listening, transcript, supported };
 }

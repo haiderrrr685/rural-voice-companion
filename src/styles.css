@@ -68,12 +68,15 @@
 
 :root {
   --radius: 1.5rem;
-  --background: oklch(0.985 0.002 250);
+  /* #F5F5F7 equivalent in oklch — off-white per spec */
+  --background: oklch(0.969 0.001 265);
+  /* Dark charcoal text */
   --foreground: oklch(0.22 0.03 265);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0.03 265);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.03 265);
+  /* Electric blue primary accent */
   --primary: oklch(0.62 0.185 265);
   --primary-foreground: oklch(0.99 0.002 250);
   --secondary: oklch(0.962 0.009 260);
@@ -82,22 +85,28 @@
   --muted-foreground: oklch(0.56 0.03 262);
   --accent: oklch(0.94 0.03 265);
   --accent-foreground: oklch(0.35 0.08 265);
+  /* Soft green accent */
+  --accent-green: oklch(0.65 0.18 145);
+  --accent-green-soft: oklch(0.94 0.06 145);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.99 0.002 250);
   --border: oklch(0.92 0.012 260);
   --input: oklch(0.92 0.012 260);
   --ring: oklch(0.72 0.1 265);
+  /* Orb visuals — blue-green tones for the glowing core */
   --accent-line: oklch(0.55 0.2 265 / 0.75);
   --gradient-orb: radial-gradient(
     circle at 32% 28%,
     oklch(1 0 0) 0%,
-    oklch(0.95 0.03 265) 38%,
-    oklch(0.86 0.08 265) 72%,
-    oklch(0.78 0.13 265) 100%
+    oklch(0.96 0.02 180) 30%,
+    oklch(0.90 0.06 200) 55%,
+    oklch(0.82 0.10 240) 78%,
+    oklch(0.75 0.14 265) 100%
   );
   --gradient-halo: radial-gradient(
     circle,
     oklch(0.62 0.185 265 / 0.22) 0%,
+    oklch(0.65 0.18 145 / 0.10) 40%,
     oklch(0.62 0.185 265 / 0) 68%
   );
   --gradient-sheen: radial-gradient(circle, oklch(1 0 0 / 0.95) 0%, oklch(1 0 0 / 0) 70%);
@@ -107,6 +116,13 @@
     oklch(0.62 0.185 265 / 0.45) 50%,
     oklch(0.62 0.185 265 / 0) 100%
   );
+  --shadow-orb: 0 4px 24px -4px oklch(0.55 0.15 200 / 0.25),
+    inset 0 1px 2px oklch(1 0 0 / 0.5);
+  /* Agent-specific colors */
+  --agent-agriculture: oklch(0.65 0.18 145);
+  --agent-government: oklch(0.62 0.185 265);
+  --agent-general: oklch(0.62 0.12 265);
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);

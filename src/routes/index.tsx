@@ -1,54 +1,96 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { Mic } from "lucide-react";
 import { useState } from "react";
 import { Orb } from "@/components/Orb";
 import { useAssistant } from "@/components/AssistantProvider";
+import { useNexusState } from "@/lib/state-engine";
 import { useSpeech } from "@/hooks/use-speech";
 import { features, greetings } from "@/lib/rural";
+import { SUPPORTED_LANGUAGES } from "@/lib/language-detect";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Rural AI — Speak in any language" },
-      {
-        name: "description",
-        content:
-          "Tap the orb and speak. Rural AI understands your language and helps with crops, government schemes, documents, health, markets and more.",
-      },
-      { property: "og:title", content: "Rural AI — Speak in any language" },
-      {
-        property: "og:description",
-        content:
-          "A voice-first AI companion for rural India. One assistant, many specialists, zero complexity.",
-      },
-    ],
-  }),
-  component: Index,
-});
+export const Route = createFileRoute("/")(
+  {
+    head: () => ({
+      meta: [
+        { title: "Rural AI — Speak in any language" },
+        {
+          name: "description",
+          content:
+            "Tap the orb and speak. Rural AI understands your language and helps with crops, government schemes, documents, health, markets and more.",
+        },
+        { property: "og:title", content: "Rural AI — Speak in any language" },
+        {
+          property: "og:description",
+          content:
+            "A voice-first AI companion for rural India. One assistant, many specialists, zero complexity.",
+        },
+      ],
+    }),
+    component: Index,
+  },
+);
 
 type Phase = "welcome" | "listening" | "detected" | "home";
 
 function Index() {
   const [phase, setPhase] = useState<Phase>("welcome");
-  const { setLanguage, openChat } = useAssistant();
-  const { listen, listening, transcript } = useSpeech();
-  const navigate = useNavigate();
+  const [detectedLangName, setDetectedLangName] = useState("Hindi");
+  const { setLanguage, confirmLanguage, openChat, languageInfo, langCode } =
+    useAssistant();
+  const nexus = useNexusState();
+  const { listenAndDetect, listening, transcript } = useSpeech();
 
   const start = () => {
     if (phase !== "welcome") return;
     setPhase("listening");
-    listen(() => {
-      setPhase("detected");
-      setLanguage("English");
-      setTimeout(() => setPhase("home"), 1400);
-    }, "My wheat crop has started turning yellow.");
+    nexus.setPhase("listening");
+
+    const initialLocale = languageInfo?.code ?? "hi-IN";
+
+    listenAndDetect(
+      (text, detectedCode) => {
+        const langInfo = SUPPORTED_LANGUAGES[detectedCode] ?? SUPPORTED_LANGUAGES.hi;
+
+        setLanguage(detectedCode);
+        setDetectedLangName(langInfo.name);
+        confirmLanguage();
+
+        nexus.setPhase("success");
+        setPhase("detected");
+        setTimeout(() => {
+          nexus.setPhase("idle");
+          setPhase("home");
+
+          // Send the first message to the chat sheet
+          openChat(text);
+        }, 1400);
+      },
+      "मेरा गेहूं का फसल पीला पड़ रहा है।",
+      initialLocale,
+    );
   };
 
   const isHome = phase === "home";
 
+  const handleCardTap = (feature: (typeof features)[number]) => {
+    const seedMessages: Record<string, string> = {
+      agriculture: "I need help with my farming and crops",
+      schemes: "What government schemes can I apply for?",
+      documents: "I need help understanding a document",
+      health: "I need health advice",
+      market: "What are today's market prices?",
+      education: "Help my child with studies",
+      livestock: "I need help with my animals",
+      emergency: "I need emergency help",
+    };
+
+    openChat(seedMessages[feature.slug] ?? `I need help with ${feature.title}`);
+  };
+
   return (
     <div className="relative min-h-screen overflow-hidden">
+      {/* Greeting word cloud */}
       <AnimatePresence>
         {!isHome && (
           <motion.div
@@ -58,8 +100,18 @@ function Index() {
             transition={{ duration: 0.7, ease: "easeInOut" }}
           >
             {greetings.map((g, i) => {
-              const x = Number(Math.min(88, Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42)).toFixed(2));
-              const y = Number(Math.min(92, Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44)).toFixed(2));
+              const x = Number(
+                Math.min(
+                  88,
+                  Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42),
+                ).toFixed(2),
+              );
+              const y = Number(
+                Math.min(
+                  92,
+                  Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44),
+                ).toFixed(2),
+              );
               const opacity = Math.max(0.12, 1.35 - g.radius * 1.15);
               return (
                 <motion.span
@@ -74,8 +126,16 @@ function Index() {
                   }}
                   transition={{
                     opacity: { duration: 1.2, delay: i * 0.03 },
-                    x: { duration: 22 + (i % 7) * 3, repeat: Infinity, ease: "easeInOut" },
-                    y: { duration: 26 + (i % 5) * 3, repeat: Infinity, ease: "easeInOut" },
+                    x: {
+                      duration: 22 + (i % 7) * 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                    y: {
+                      duration: 26 + (i % 5) * 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
                   }}
                 >
                   {g.text}
@@ -89,6 +149,7 @@ function Index() {
         )}
       </AnimatePresence>
 
+      {/* Orb + status text */}
       <motion.div
         layout
         className={
@@ -101,7 +162,8 @@ function Index() {
         <motion.div layout>
           <Orb
             size={isHome ? 90 : 220}
-            active={listening || phase === "detected"}
+            nexusPhase={nexus.phase}
+            activeAgent={nexus.activeAgent}
             onClick={() => (isHome ? openChat() : start())}
           />
         </motion.div>
@@ -116,7 +178,11 @@ function Index() {
               className="mt-8 max-w-xs text-center text-sm text-muted-foreground"
             >
               Listening…
-              {transcript && <span className="mt-2 block text-foreground">“{transcript}”</span>}
+              {transcript && (
+                <span className="mt-2 block text-foreground">
+                  "{transcript}"
+                </span>
+              )}
             </motion.p>
           )}
           {phase === "detected" && (
@@ -127,7 +193,7 @@ function Index() {
               exit={{ opacity: 0 }}
               className="mt-8 rounded-full bg-card px-5 py-2 text-sm font-medium text-primary shadow-soft"
             >
-              English detected
+              {detectedLangName} detected
             </motion.p>
           )}
           {isHome && (
@@ -143,6 +209,7 @@ function Index() {
         </AnimatePresence>
       </motion.div>
 
+      {/* Hint at bottom */}
       <AnimatePresence>
         {!isHome && (
           <motion.div
@@ -165,6 +232,7 @@ function Index() {
         )}
       </AnimatePresence>
 
+      {/* Home screen: daily brief + feature cards */}
       <AnimatePresence>
         {isHome && (
           <motion.section
@@ -183,8 +251,9 @@ function Index() {
                 Good morning · Today
               </p>
               <p className="mt-2 text-sm leading-relaxed text-foreground/80">
-                Rain expected by evening — water your crops after sunset. Wheat prices are up 3% at
-                the nearby mandi, and a subsidy deadline is 6 days away.
+                Rain expected by evening — water your crops after sunset. Wheat
+                prices are up 3% at the nearby mandi, and a subsidy deadline is
+                6 days away.
               </p>
             </motion.div>
 
@@ -193,7 +262,11 @@ function Index() {
                 <motion.button
                   key={f.slug}
                   initial={{ opacity: 0, y: 24, scale: 0.94 }}
-                  animate={{ opacity: 1, y: i % 2 === 1 ? 14 : 0, scale: 1 }}
+                  animate={{
+                    opacity: 1,
+                    y: i % 2 === 1 ? 14 : 0,
+                    scale: 1,
+                  }}
                   transition={{
                     type: "spring",
                     stiffness: 220,
@@ -202,7 +275,7 @@ function Index() {
                   }}
                   whileHover={{ y: (i % 2 === 1 ? 14 : 0) - 4 }}
                   whileTap={{ scale: 0.96 }}
-                  onClick={() => navigate({ to: `/${f.slug}` })}
+                  onClick={() => handleCardTap(f)}
                   className="rounded-3xl bg-card p-4 text-left shadow-soft"
                 >
                   <span
@@ -212,7 +285,9 @@ function Index() {
                     {f.emoji}
                   </span>
                   <p className="mt-3 text-sm font-semibold">{f.title}</p>
-                  <p className="mt-1 text-xs leading-snug text-muted-foreground">{f.desc}</p>
+                  <p className="mt-1 text-xs leading-snug text-muted-foreground">
+                    {f.desc}
+                  </p>
                 </motion.button>
               ))}
             </div>
