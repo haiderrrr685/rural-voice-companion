@@ -17,7 +17,12 @@ export function Orb({
   return (
     <Root
       {...(interactive
-        ? { type: "button" as const, onClick, "aria-label": "Talk to the assistant" }
+        ? {
+            type: "button" as const,
+            onClick,
+            "aria-label": "Talk to the assistant",
+            whileTap: { scale: 0.94 },
+          }
         : { "aria-hidden": true })}
       className="relative grid place-items-center rounded-full outline-none"
       style={{ width: size, height: size }}
@@ -27,7 +32,6 @@ export function Orb({
         repeat: Infinity,
         ease: "easeInOut",
       }}
-      whileTap={interactive ? { scale: 0.94 } : undefined}
     >
       <span
         className="absolute inset-[-28%] rounded-full opacity-70 blur-2xl"
