@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgricultureRouteImport } from './routes/agriculture'
 import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as HealthRouteImport } from './routes/health'
 import { Route as SchemesRouteImport } from './routes/schemes'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const DocumentsRoute = DocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SchemesRoute = SchemesRouteImport.update({
   id: '/schemes',
   path: '/schemes',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agriculture': typeof AgricultureRoute
   '/documents': typeof DocumentsRoute
+  '/health': typeof HealthRoute
   '/schemes': typeof SchemesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agriculture': typeof AgricultureRoute
   '/documents': typeof DocumentsRoute
+  '/health': typeof HealthRoute
   '/schemes': typeof SchemesRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/agriculture': typeof AgricultureRoute
   '/documents': typeof DocumentsRoute
+  '/health': typeof HealthRoute
   '/schemes': typeof SchemesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/agriculture' | '/documents' | '/schemes'
+  fullPaths: '/' | '/agriculture' | '/documents' | '/health' | '/schemes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/agriculture' | '/documents' | '/schemes'
-  id: '__root__' | '/' | '/agriculture' | '/documents' | '/schemes'
+  to: '/' | '/agriculture' | '/documents' | '/health' | '/schemes'
+  id: '__root__' | '/' | '/agriculture' | '/documents' | '/health' | '/schemes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgricultureRoute: typeof AgricultureRoute
   DocumentsRoute: typeof DocumentsRoute
+  HealthRoute: typeof HealthRoute
   SchemesRoute: typeof SchemesRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocumentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schemes': {
       id: '/schemes'
       path: '/schemes'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgricultureRoute: AgricultureRoute,
   DocumentsRoute: DocumentsRoute,
+  HealthRoute: HealthRoute,
   SchemesRoute: SchemesRoute,
 }
 export const routeTree = rootRouteImport
