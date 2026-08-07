@@ -62,6 +62,15 @@ export function useSpeech() {
     rec.continuous = false;
     rec.interimResults = true;
     let final = "";
+    let settled = false;
+    const finish = (text: string) => {
+      if (settled) return;
+      settled = true;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setListening(false);
+      setTranscript(text);
+      onDone(text);
+    };
     rec.onresult = (e) => {
       let text = "";
       for (let i = 0; i < e.results.length; i++) {
@@ -70,22 +79,21 @@ export function useSpeech() {
       final = text;
       setTranscript(text);
     };
-    rec.onerror = () => {
-      setListening(false);
-      setTranscript(fallbackText);
-      onDone(fallbackText);
-    };
-    rec.onend = () => {
-      setListening(false);
-      const text = final.trim() || fallbackText;
-      setTranscript(text);
-      onDone(text);
-    };
+    rec.onerror = () => finish(fallbackText);
+    rec.onend = () => finish(final.trim() || fallbackText);
+    // Safety net: never leave the prototype stuck in "Listening…".
+    timerRef.current = setTimeout(() => {
+      try {
+        rec.stop();
+      } catch {
+        /* ignore */
+      }
+      finish(final.trim() || fallbackText);
+    }, 6000);
     try {
       rec.start();
     } catch {
-      setListening(false);
-      onDone(fallbackText);
+      finish(fallbackText);
     }
   }, []);
 
