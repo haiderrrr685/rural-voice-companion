@@ -2,6 +2,19 @@
 
 Rural AI – Complete Product Flow
 
+## Quick start
+
+Run the workable prototype locally (Node 18+ recommended):
+
+```bash
+npm install
+npm run dev
+```
+
+Open the Vite URL shown in the terminal (commonly http://localhost:8080 or http://localhost:5173).
+
+Full run options and troubleshooting are in [docs/RUNNING.md](docs/RUNNING.md#L1).
+
 The goal of this app isn’t to build another chatbot. It’s to build an AI companion for rural India that feels natural to use even for someone who has never used AI before. The user should never have to think about languages, menus, or which feature to open. They simply speak, and the AI handles the rest.
 
 ⸻
