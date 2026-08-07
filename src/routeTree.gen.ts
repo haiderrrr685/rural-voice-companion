@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgricultureRouteImport } from './routes/agriculture'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as EducationRouteImport } from './routes/education'
+import { Route as EmergencyRouteImport } from './routes/emergency'
+import { Route as HealthRouteImport } from './routes/health'
+import { Route as LivestockRouteImport } from './routes/livestock'
+import { Route as MarketRouteImport } from './routes/market'
+import { Route as SchemesRouteImport } from './routes/schemes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgricultureRoute = AgricultureRouteImport.update({
+  id: '/agriculture',
+  path: '/agriculture',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EducationRoute = EducationRouteImport.update({
+  id: '/education',
+  path: '/education',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmergencyRoute = EmergencyRouteImport.update({
+  id: '/emergency',
+  path: '/emergency',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthRoute = HealthRouteImport.update({
+  id: '/health',
+  path: '/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivestockRoute = LivestockRouteImport.update({
+  id: '/livestock',
+  path: '/livestock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketRoute = MarketRouteImport.update({
+  id: '/market',
+  path: '/market',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchemesRoute = SchemesRouteImport.update({
+  id: '/schemes',
+  path: '/schemes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agriculture': typeof AgricultureRoute
+  '/documents': typeof DocumentsRoute
+  '/education': typeof EducationRoute
+  '/emergency': typeof EmergencyRoute
+  '/health': typeof HealthRoute
+  '/livestock': typeof LivestockRoute
+  '/market': typeof MarketRoute
+  '/schemes': typeof SchemesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agriculture': typeof AgricultureRoute
+  '/documents': typeof DocumentsRoute
+  '/education': typeof EducationRoute
+  '/emergency': typeof EmergencyRoute
+  '/health': typeof HealthRoute
+  '/livestock': typeof LivestockRoute
+  '/market': typeof MarketRoute
+  '/schemes': typeof SchemesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agriculture': typeof AgricultureRoute
+  '/documents': typeof DocumentsRoute
+  '/education': typeof EducationRoute
+  '/emergency': typeof EmergencyRoute
+  '/health': typeof HealthRoute
+  '/livestock': typeof LivestockRoute
+  '/market': typeof MarketRoute
+  '/schemes': typeof SchemesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agriculture'
+    | '/documents'
+    | '/education'
+    | '/emergency'
+    | '/health'
+    | '/livestock'
+    | '/market'
+    | '/schemes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/agriculture'
+    | '/documents'
+    | '/education'
+    | '/emergency'
+    | '/health'
+    | '/livestock'
+    | '/market'
+    | '/schemes'
+  id:
+    | '__root__'
+    | '/'
+    | '/agriculture'
+    | '/documents'
+    | '/education'
+    | '/emergency'
+    | '/health'
+    | '/livestock'
+    | '/market'
+    | '/schemes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgricultureRoute: typeof AgricultureRoute
+  DocumentsRoute: typeof DocumentsRoute
+  EducationRoute: typeof EducationRoute
+  EmergencyRoute: typeof EmergencyRoute
+  HealthRoute: typeof HealthRoute
+  LivestockRoute: typeof LivestockRoute
+  MarketRoute: typeof MarketRoute
+  SchemesRoute: typeof SchemesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +156,76 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agriculture': {
+      id: '/agriculture'
+      path: '/agriculture'
+      fullPath: '/agriculture'
+      preLoaderRoute: typeof AgricultureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/education': {
+      id: '/education'
+      path: '/education'
+      fullPath: '/education'
+      preLoaderRoute: typeof EducationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emergency': {
+      id: '/emergency'
+      path: '/emergency'
+      fullPath: '/emergency'
+      preLoaderRoute: typeof EmergencyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/health': {
+      id: '/health'
+      path: '/health'
+      fullPath: '/health'
+      preLoaderRoute: typeof HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livestock': {
+      id: '/livestock'
+      path: '/livestock'
+      fullPath: '/livestock'
+      preLoaderRoute: typeof LivestockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/market': {
+      id: '/market'
+      path: '/market'
+      fullPath: '/market'
+      preLoaderRoute: typeof MarketRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schemes': {
+      id: '/schemes'
+      path: '/schemes'
+      fullPath: '/schemes'
+      preLoaderRoute: typeof SchemesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgricultureRoute: AgricultureRoute,
+  DocumentsRoute: DocumentsRoute,
+  EducationRoute: EducationRoute,
+  EmergencyRoute: EmergencyRoute,
+  HealthRoute: HealthRoute,
+  LivestockRoute: LivestockRoute,
+  MarketRoute: MarketRoute,
+  SchemesRoute: SchemesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
