@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AssistantProvider } from "../components/AssistantProvider";
+import { ChatSheet } from "../components/ChatSheet";
 
 function NotFoundComponent() {
   return (
