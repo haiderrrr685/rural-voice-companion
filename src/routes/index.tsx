@@ -65,7 +65,7 @@ function Index() {
                 <motion.span
                   key={`${g.text}-${i}`}
                   className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-center text-sm font-medium text-primary"
-                  style={{ left: `${x}%`, top: `${y}%`, opacity }}
+                  style={{ left: `${x}%`, top: `${y}%` }}
                   initial={{ opacity: 0 }}
                   animate={{
                     opacity: phase === "listening" ? opacity * 0.5 : opacity,
