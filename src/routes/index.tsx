@@ -58,9 +58,9 @@ function Index() {
             transition={{ duration: 0.7, ease: "easeInOut" }}
           >
             {greetings.map((g, i) => {
-              const x = 50 + Math.cos(g.angle) * g.radius * 46;
-              const y = 50 + Math.sin(g.angle) * g.radius * 44;
-              const opacity = Math.max(0.12, 1.2 - g.radius * 1.1);
+              const x = Math.min(88, Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42));
+              const y = Math.min(92, Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44));
+              const opacity = Math.max(0.12, 1.35 - g.radius * 1.15);
               return (
                 <motion.span
                   key={`${g.text}-${i}`}
