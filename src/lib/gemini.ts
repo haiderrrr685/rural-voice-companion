@@ -167,6 +167,71 @@ export async function processWithGemini(
   };
 }
 
+// ─── Vision (Crop Disease Detection) ───────────────────────────────
+
+const VISION_SYSTEM = `You are an expert agricultural advisor. Identify any disease, pest, or nutrient deficiency visible in this crop photo.
+
+Rules:
+- Be specific: name the disease/pest/deficiency
+- Give a confidence level (high/medium/low)
+- List locally available, affordable remedies (exact quantities)
+- Include one organic alternative
+- If the image is unclear or not a crop, say so honestly and ask the user to describe the problem instead
+- Keep it short — bullet points, no jargon`;
+
+export interface VisionResponse {
+  answer: string;
+  agent: "agriculture";
+  confidence: "high" | "medium" | "low";
+}
+
+/**
+ * Send a crop photo to Gemini Vision for disease detection.
+ * imageBase64 should be the raw base64 string (without the data:image/... prefix).
+ */
+export async function askNexusVision(
+  imageBase64: string,
+  mimeType: string,
+  language: string,
+  signal?: AbortSignal,
+): Promise<VisionResponse> {
+  const key = getApiKey();
+  if (!key || key === "your_api_key_here") {
+    throw new Error("NO_API_KEY");
+  }
+
+  const langInstruction = `\n\nCRITICAL: Respond ONLY in ${language}. Never switch to English unless the user's language is English.`;
+
+  const res = await fetch(`${API_BASE}/${AGENT_MODEL}:generateContent?key=${key}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: VISION_SYSTEM + langInstruction }] },
+      contents: [{
+        parts: [
+          { inlineData: { mimeType, data: imageBase64 } },
+          { text: "Identify what's wrong with this crop and suggest treatment." },
+        ],
+      }],
+      generationConfig: { temperature: 0.4, maxOutputTokens: 1024 },
+    }),
+    signal,
+  });
+
+  if (!res.ok) {
+    const status = res.status;
+    if (status === 429) throw new Error("RATE_LIMITED");
+    if (status === 401 || status === 403) throw new Error("BAD_API_KEY");
+    throw new Error(`API_ERROR_${status}`);
+  }
+
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error("EMPTY_RESPONSE");
+
+  return { answer: text, agent: "agriculture", confidence: "high" };
+}
+
 // ─── Localized Error Messages ──────────────────────────────────────
 
 const ERROR_MESSAGES: Record<string, Record<string, string>> = {

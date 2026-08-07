@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { Mic } from "lucide-react";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { useNexusState } from "@/lib/state-engine";
 import { useSpeech } from "@/hooks/use-speech";
 import { features, greetings } from "@/lib/rural";
 import { SUPPORTED_LANGUAGES } from "@/lib/language-detect";
+import { t, tFeature } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")(
   {
@@ -40,6 +41,7 @@ function Index() {
     useAssistant();
   const nexus = useNexusState();
   const { listenAndDetect, listening, transcript } = useSpeech();
+  const navigate = useNavigate();
 
   const start = () => {
     if (phase !== "welcome") return;
@@ -66,7 +68,7 @@ function Index() {
           openChat(text);
         }, 1400);
       },
-      "मेरा गेहूं का फसल पीला पड़ रहा है।",
+      t("FallbackMicPrompt", initialLocale),
       initialLocale,
     );
   };
@@ -74,18 +76,20 @@ function Index() {
   const isHome = phase === "home";
 
   const handleCardTap = (feature: (typeof features)[number]) => {
-    const seedMessages: Record<string, string> = {
-      agriculture: "I need help with my farming and crops",
-      schemes: "What government schemes can I apply for?",
-      documents: "I need help understanding a document",
-      health: "I need health advice",
-      market: "What are today's market prices?",
-      education: "Help my child with studies",
-      livestock: "I need help with my animals",
-      emergency: "I need emergency help",
-    };
+    // Emergency and agriculture navigate to their own routes
+    const directRoutes = ["emergency", "agriculture"];
+    if (directRoutes.includes(feature.slug)) {
+      navigate({ to: `/${feature.slug}` });
+      return;
+    }
 
-    openChat(seedMessages[feature.slug] ?? `I need help with ${feature.title}`);
+    // Other cards open chat with a translated seed message
+    let seedText = tFeature(feature.slug, "seed", langCode);
+    if (!seedText) {
+      seedText = `I need help with ${feature.title}`;
+    }
+
+    openChat(seedText);
   };
 
   return (
@@ -177,7 +181,7 @@ function Index() {
               exit={{ opacity: 0 }}
               className="mt-8 max-w-xs text-center text-sm text-muted-foreground"
             >
-              Listening…
+              {t("Listening…", langCode)}
               {transcript && (
                 <span className="mt-2 block text-foreground">
                   "{transcript}"
@@ -193,7 +197,7 @@ function Index() {
               exit={{ opacity: 0 }}
               className="mt-8 rounded-full bg-card px-5 py-2 text-sm font-medium text-primary shadow-soft"
             >
-              {detectedLangName} detected
+              {detectedLangName} {t("detected", langCode)}
             </motion.p>
           )}
           {isHome && (
@@ -203,7 +207,7 @@ function Index() {
               animate={{ opacity: 1 }}
               className="mt-4 text-center text-sm text-muted-foreground"
             >
-              Tap the orb and ask anything
+              {t("Tap the orb and ask anything", langCode)}
             </motion.p>
           )}
         </AnimatePresence>
@@ -227,7 +231,7 @@ function Index() {
             >
               <Mic className="size-4 text-primary" />
             </motion.span>
-            <p className="text-sm text-foreground/70">Speak in any language</p>
+            <p className="text-sm text-foreground/70">{t("Speak in any language", langCode)}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -248,12 +252,10 @@ function Index() {
               className="rounded-3xl bg-card p-5 shadow-soft"
             >
               <p className="text-[11px] font-medium tracking-wide text-primary">
-                Good morning · Today
+                {t("Good morning · Today", langCode)}
               </p>
               <p className="mt-2 text-sm leading-relaxed text-foreground/80">
-                Rain expected by evening — water your crops after sunset. Wheat
-                prices are up 3% at the nearby mandi, and a subsidy deadline is
-                6 days away.
+                {t("WeatherBrief", langCode)}
               </p>
             </motion.div>
 
@@ -284,9 +286,9 @@ function Index() {
                   >
                     {f.emoji}
                   </span>
-                  <p className="mt-3 text-sm font-semibold">{f.title}</p>
+                  <p className="mt-3 text-sm font-semibold">{tFeature(f.slug, "title", langCode) || f.title}</p>
                   <p className="mt-1 text-xs leading-snug text-muted-foreground">
-                    {f.desc}
+                    {tFeature(f.slug, "desc", langCode) || f.desc}
                   </p>
                 </motion.button>
               ))}

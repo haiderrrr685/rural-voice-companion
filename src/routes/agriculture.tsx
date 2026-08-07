@@ -7,6 +7,8 @@ import {
   Shimmer,
 } from "@/components/FeatureShell";
 import { ImagePicker } from "@/components/ImagePicker";
+import { askNexusVision, getErrorMessage, isGeminiConfigured } from "@/lib/gemini";
+import { useAssistant } from "@/components/AssistantProvider";
 
 export const Route = createFileRoute("/agriculture")({
   head: () => ({
@@ -29,7 +31,33 @@ export const Route = createFileRoute("/agriculture")({
 
 function Agriculture() {
   const [image, setImage] = useState<string | null>(null);
-  const [stage, setStage] = useState<"idle" | "loading" | "done">("idle");
+  const [stage, setStage] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [result, setResult] = useState<string>("");
+  const { language, langCode } = useAssistant();
+
+  const analyse = async () => {
+    if (!image) return;
+    setStage("loading");
+
+    try {
+      // Extract base64 and mime type from data URL
+      const match = image.match(/^data:(image\/\w+);base64,(.+)$/);
+      if (!match) {
+        setResult("Could not read the image. Please try another photo.");
+        setStage("error");
+        return;
+      }
+      const [, mimeType, base64] = match;
+
+      const response = await askNexusVision(base64, mimeType, language);
+      setResult(response.answer);
+      setStage("done");
+    } catch (err: any) {
+      const code = err?.message || "DEFAULT";
+      setResult(getErrorMessage(code, langCode));
+      setStage("error");
+    }
+  };
 
   return (
     <FeatureShell
@@ -42,27 +70,26 @@ function Agriculture() {
         onPick={(url) => {
           setImage(url);
           setStage("idle");
+          setResult("");
         }}
       />
       <PrimaryButton
         disabled={!image || stage === "loading"}
-        onClick={() => {
-          setStage("loading");
-          setTimeout(() => setStage("done"), 2200);
-        }}
+        onClick={analyse}
       >
-        {stage === "done" ? "Analyse again" : "Analyse crop"}
+        {stage === "done" || stage === "error" ? "Analyse again" : "Analyse crop"}
       </PrimaryButton>
 
       {stage === "loading" && <Shimmer label="Looking at leaf colour, spots and veins…" />}
-      {stage === "done" && (
+      {(stage === "done" || stage === "error") && (
         <ResultCard
           agent="Agriculture Agent"
-          title="Early leaf blight with nitrogen deficiency"
-          body={
-            "Confidence: 91%\n\nWhat is happening:\nBrown rings on older leaves show early blight. The pale yellow between veins shows the plant is short of nitrogen.\n\nWhat to do now:\n• Remove and burn the badly spotted leaves\n• Spray Mancozeb 2 g per litre, evening time, repeat after 7 days\n• Apply 20 kg urea per acre with the next irrigation\n• Water at the roots, never on the leaves\n\nOrganic option:\nNeem oil 5 ml per litre + buttermilk spray, twice a week."
-          }
-          chips={["Cost ≈ ₹450 / acre", "Recheck in 5 days", "Spray after 5 PM"]}
+          title={stage === "error" ? "Error" : "Analysis Result"}
+          body={result}
+          chips={stage === "done" ? [
+            ...(isGeminiConfigured() ? ["Powered by Gemini Vision"] : []),
+            "Recheck in 5 days",
+          ] : []}
         />
       )}
     </FeatureShell>

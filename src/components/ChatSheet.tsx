@@ -7,6 +7,8 @@ import { useNexusState } from "@/lib/state-engine";
 import { useSpeech } from "@/hooks/use-speech";
 import { useTts } from "@/hooks/use-tts";
 import { suggestedPrompts } from "@/lib/rural";
+import { delay } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 import type { AgentId } from "@/lib/nexus-engine";
 
 type Msg = {
@@ -201,7 +203,7 @@ export function ChatSheet() {
         nexus.setPhase("thinking"); // Instant transition to thinking
         send(text);
       },
-      "मेरा फसल पीला पड़ रहा है",
+      t("FallbackMicPrompt", currentLocale),
       currentLocale,
     );
   };
@@ -252,12 +254,12 @@ export function ChatSheet() {
                     transition={{ duration: 0.15 }}
                   >
                     {listening
-                      ? "Listening…"
+                      ? t("Listening…", langCode)
                       : speaking
-                        ? "Speaking…"
+                        ? t("Speaking…", langCode)
                         : typing
-                          ? "Thinking…"
-                          : `Speaking ${language}`}
+                          ? t("Thinking…", langCode)
+                          : `${t("Speaking…", langCode)} ${language}`}
                   </motion.span>
                 </AnimatePresence>
               </p>
@@ -276,10 +278,10 @@ export function ChatSheet() {
             {messages.length === 0 && (
               <div className="pt-6">
                 <p className="text-2xl font-semibold leading-snug">
-                  Ask me anything.
+                  {t("Ask me anything.", langCode)}
                   <br />
                   <span className="text-muted-foreground">
-                    In any language.
+                    {t("In any language.", langCode)}
                   </span>
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
@@ -289,10 +291,11 @@ export function ChatSheet() {
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.06 * i }}
-                      onClick={() => send(p)}
+                      onClick={() => send(p)} // send the original English prompt to the AI, it handles translation automatically based on langCode in the prompt construction, but wait...
+                      // Actually, if we send the English prompt, it's fine because the AI understands English, but the UI should show it in the current language.
                       className="rounded-2xl bg-card px-4 py-2 text-sm shadow-soft transition-transform active:scale-95"
                     >
-                      {p}
+                      {t(p, langCode)}
                     </motion.button>
                   ))}
                 </div>
@@ -374,13 +377,13 @@ export function ChatSheet() {
           <div className="flex items-center gap-2 px-4 pb-7 pt-2">
             {/* Live transcript shown in the input when listening */}
             <input
-              value={listening ? transcript || "Listening…" : input}
+              value={listening ? transcript || t("Listening…", langCode) : input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) =>
                 e.key === "Enter" && !e.shiftKey && send(input)
               }
               disabled={listening}
-              placeholder="Type or tap the mic…"
+              placeholder={t("Tap the orb and ask anything", langCode)}
               className="h-12 flex-1 rounded-full bg-card px-5 text-sm shadow-soft outline-none placeholder:text-muted-foreground disabled:opacity-60"
             />
             <button

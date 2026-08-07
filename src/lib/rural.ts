@@ -101,6 +101,13 @@ export const features: Feature[] = [
     desc: "Homework help & learning",
     tint: "oklch(0.94 0.05 300)",
   },
+  {
+    slug: "emergency",
+    emoji: "🚨",
+    title: "Emergency SOS",
+    desc: "Helplines & first aid",
+    tint: "oklch(0.92 0.08 25)",
+  },
 ];
 
 export const suggestedPrompts = [
