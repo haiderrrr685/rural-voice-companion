@@ -58,8 +58,8 @@ function Index() {
             transition={{ duration: 0.7, ease: "easeInOut" }}
           >
             {greetings.map((g, i) => {
-              const x = Math.min(88, Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42));
-              const y = Math.min(92, Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44));
+              const x = Number(Math.min(88, Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42)).toFixed(2));
+              const y = Number(Math.min(92, Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44)).toFixed(2));
               const opacity = Math.max(0.12, 1.35 - g.radius * 1.15);
               return (
                 <motion.span

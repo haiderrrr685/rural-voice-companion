@@ -89,7 +89,7 @@ export function useSpeech() {
         /* ignore */
       }
       finish(final.trim() || fallbackText);
-    }, 6000);
+    }, 4000);
     try {
       rec.start();
     } catch {
