@@ -75,15 +75,17 @@ async function callGemini(
 
 const ROUTER_SYSTEM = `You classify messages from rural Indian farmers into exactly one category.
 Reply with ONLY one word — no explanation, no punctuation:
+EMERGENCY — distress, immediate danger, accidents, injuries, severe health crises, needing police/ambulance/fire
 AGRICULTURE — anything about crops, soil, pests, irrigation, fertilizer, seeds, harvest, weather for farming
 GOVERNMENT — anything about schemes, subsidies, loans, insurance, documents, eligibility, applications
 GENERAL — anything else (health, education, market prices, stories, greetings)`;
 
-export type AgentCategory = "agriculture" | "government" | "general";
+export type AgentCategory = "agriculture" | "government" | "general" | "emergency";
 
 export async function classifyIntent(message: string, signal?: AbortSignal): Promise<AgentCategory> {
   const result = await callGemini(message, ROUTER_SYSTEM, ROUTER_MODEL, 0.1, 10, signal);
   const lower = result.trim().toLowerCase();
+  if (lower.includes("emergency")) return "emergency";
   if (lower.includes("agriculture")) return "agriculture";
   if (lower.includes("government")) return "government";
   return "general";
@@ -158,6 +160,16 @@ export async function processWithGemini(
   signal?: AbortSignal,
 ): Promise<GeminiResponse> {
   const agent = await classifyIntent(message, signal);
+
+  // If it's an emergency, short-circuit and don't call the full agent
+  if (agent === "emergency") {
+    return {
+      answer: "EMERGENCY_TRIGGER",
+      agent,
+      confidence: "high",
+    };
+  }
+
   const answer = await getAgentResponse(message, agent, language, signal);
 
   return {

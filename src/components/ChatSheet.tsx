@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { Mic, Send, X, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { Orb } from "./Orb";
 import { useAssistant } from "./AssistantProvider";
 import { useNexusState } from "@/lib/state-engine";
@@ -46,6 +47,7 @@ export function ChatSheet() {
   } = useAssistant();
 
   const nexus = useNexusState();
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -96,6 +98,14 @@ export function ChatSheet() {
         processMessage(clean, abortControllerRef.current?.signal),
         delay(MIN_THINKING_MS),
       ]);
+
+      if (response.agent === "emergency") {
+        setTyping(false);
+        nexus.setPhase("idle");
+        closeChat();
+        navigate({ to: "/emergency" });
+        return;
+      }
 
       nexus.setAgent(response.agent);
       nexus.setConfidence(response.confidence);

@@ -11,8 +11,8 @@
 
 // ─── Types ──────────────────────────────────────────────────────────
 
-export type AgentCategory = "AGRICULTURE" | "GOVERNMENT" | "GENERAL";
-export type AgentId = "agriculture" | "government" | "general";
+export type AgentCategory = "AGRICULTURE" | "GOVERNMENT" | "GENERAL" | "EMERGENCY";
+export type AgentId = "agriculture" | "government" | "general" | "emergency";
 export type Confidence = "high" | "medium" | "low";
 
 export interface AgentResponse {
