@@ -64,7 +64,9 @@ export function useSpeech() {
     let final = "";
     rec.onresult = (e) => {
       let text = "";
-      for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript;
+      for (let i = 0; i < e.results.length; i++) {
+        text += e.results[i]?.[0]?.transcript ?? "";
+      }
       final = text;
       setTranscript(text);
     };
