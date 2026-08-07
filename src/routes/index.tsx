@@ -94,6 +94,16 @@ function Index() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+      {/* Prototype Language Toggle */}
+      {isHome && (
+        <button
+          onClick={() => setLanguage(langCode === "en" ? "hi" : "en")}
+          className="absolute right-4 top-4 z-50 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary backdrop-blur-md transition-colors hover:bg-primary/20"
+        >
+          {langCode === "en" ? "हिंदी में स्विच करें" : "Switch to English"}
+        </button>
+      )}
+
       {/* Greeting word cloud */}
       <AnimatePresence>
         {!isHome && (
