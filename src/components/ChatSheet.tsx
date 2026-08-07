@@ -48,6 +48,7 @@ export function ChatSheet() {
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const inFlightRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { listenAndDetect, listening, transcript, stop: stopListening } =
     useSpeech();
   const { speak, speaking, stop: stopTts } = useTts();
@@ -62,6 +63,7 @@ export function ChatSheet() {
     if (!clean || inFlightRef.current) return; // debounce guard
 
     inFlightRef.current = true;
+    abortControllerRef.current = new AbortController();
 
     // Show user message + thinking state IMMEDIATELY
     setMessages((m) => [...m, { id: ++uid, role: "user", text: clean }]);
@@ -89,7 +91,7 @@ export function ChatSheet() {
     try {
       // Run API call + minimum delay in parallel so thinking anim is visible
       const [response] = await Promise.all([
-        processMessage(clean),
+        processMessage(clean, abortControllerRef.current?.signal),
         delay(MIN_THINKING_MS),
       ]);
 
@@ -123,7 +125,13 @@ export function ChatSheet() {
       nexus.setPhase("speaking");
       await speak(answerText, langCode);
       nexus.setPhase("idle");
-    } catch {
+    } catch (err: any) {
+      if (err.name === "AbortError") {
+        console.log("[ChatSheet] Request aborted");
+        setTyping(false);
+        nexus.setPhase("idle");
+        return;
+      }
       setTyping(false);
       nexus.setPhase("error");
       setMessages((m) => [
@@ -137,6 +145,7 @@ export function ChatSheet() {
       ]);
     } finally {
       inFlightRef.current = false;
+      abortControllerRef.current = null;
     }
   };
 
@@ -159,17 +168,30 @@ export function ChatSheet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatOpen]);
 
-  const handleMicPress = () => {
-    // If currently listening, stop it
-    if (listening) {
-      stopListening();
+  // Unified orb click handler (tap to stop / tap to talk)
+  const handleOrbPress = () => {
+    // 1. If speaking (TTS), stop audio
+    if (speaking || nexus.phase === "speaking") {
+      stopTts();
+      nexus.setPhase("idle");
       return;
     }
-    // Cancel TTS if it's playing (clean interruption)
-    stopTts();
-    // Don't start listening if a request is in flight
-    if (inFlightRef.current) return;
 
+    // 2. If listening, stop microphone
+    if (listening || nexus.phase === "listening") {
+      stopListening();
+      nexus.setPhase("idle");
+      return;
+    }
+
+    // 3. If thinking/processing, abort API call
+    if (inFlightRef.current || nexus.phase === "thinking" || nexus.phase === "processing") {
+      abortControllerRef.current?.abort();
+      nexus.setPhase("idle");
+      return;
+    }
+
+    // 4. If idle, start listening
     const currentLocale = languageInfo?.code ?? "hi-IN";
     nexus.setPhase("listening");
 
@@ -205,7 +227,8 @@ export function ChatSheet() {
           <header className="flex items-center gap-3 px-5 pb-3 pt-6">
             <Orb
               size={40}
-              interactive={false}
+              interactive={true}
+              onClick={handleOrbPress}
               nexusPhase={nexus.phase}
               activeAgent={nexus.activeAgent}
             />
@@ -362,7 +385,7 @@ export function ChatSheet() {
             />
             <button
               aria-label={listening ? "Stop listening" : "Speak"}
-              onClick={handleMicPress}
+              onClick={handleOrbPress}
               className={`grid size-12 shrink-0 place-items-center rounded-full transition-all duration-200 ${
                 listening
                   ? "bg-primary text-primary-foreground scale-110"
