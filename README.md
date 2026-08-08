@@ -1,7 +1,7 @@
 # Rural Companion
 
 Rural AI – Complete Product Flow
-
+Built for a hackathon organized by IIIT Pune and IIT Bombay. Rural Companion helps rural users access farming guidance, government schemes, and essential information through simple, multilingual voice conversations.
 ## Quick start
 
 Run the workable prototype locally (Node 18+ recommended):
