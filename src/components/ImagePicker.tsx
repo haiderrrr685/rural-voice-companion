@@ -2,13 +2,7 @@ import { Camera } from "lucide-react";
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
 
-export function ImagePicker({
-  hint,
-  onPick,
-}: {
-  hint: string;
-  onPick: (dataUrl: string) => void;
-}) {
+export function ImagePicker({ hint, onPick }: { hint: string; onPick: (dataUrl: string) => void }) {
   const ref = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 

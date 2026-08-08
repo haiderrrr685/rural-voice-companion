@@ -60,9 +60,7 @@ export function FeatureShell({
 }
 
 export function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`rounded-3xl bg-card p-5 shadow-soft ${className}`}>{children}</div>
-  );
+  return <div className={`rounded-3xl bg-card p-5 shadow-soft ${className}`}>{children}</div>;
 }
 
 export function Field({ label, children }: { label: string; children: ReactNode }) {

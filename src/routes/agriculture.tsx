@@ -1,11 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import {
-  FeatureShell,
-  PrimaryButton,
-  ResultCard,
-  Shimmer,
-} from "@/components/FeatureShell";
+import { FeatureShell, PrimaryButton, ResultCard, Shimmer } from "@/components/FeatureShell";
 import { ImagePicker } from "@/components/ImagePicker";
 import { askNexusVision, getErrorMessage, isGeminiConfigured } from "@/lib/gemini";
 import { useAssistant } from "@/components/AssistantProvider";
@@ -47,13 +42,14 @@ function Agriculture() {
         setStage("error");
         return;
       }
-      const [, mimeType, base64] = match;
+      const mimeType = match[1]!;
+      const base64 = match[2]!;
 
       const response = await askNexusVision(base64, mimeType, language);
       setResult(response.answer);
       setStage("done");
-    } catch (err: any) {
-      const code = err?.message || "DEFAULT";
+    } catch (err: unknown) {
+      const code = err instanceof Error ? err.message : "DEFAULT";
       setResult(getErrorMessage(code, langCode));
       setStage("error");
     }
@@ -73,10 +69,7 @@ function Agriculture() {
           setResult("");
         }}
       />
-      <PrimaryButton
-        disabled={!image || stage === "loading"}
-        onClick={analyse}
-      >
+      <PrimaryButton disabled={!image || stage === "loading"} onClick={analyse}>
         {stage === "done" || stage === "error" ? "Analyse again" : "Analyse crop"}
       </PrimaryButton>
 
@@ -86,10 +79,11 @@ function Agriculture() {
           agent="Agriculture Agent"
           title={stage === "error" ? "Error" : "Analysis Result"}
           body={result}
-          chips={stage === "done" ? [
-            ...(isGeminiConfigured() ? ["Powered by Gemini Vision"] : []),
-            "Recheck in 5 days",
-          ] : []}
+          chips={
+            stage === "done"
+              ? [...(isGeminiConfigured() ? ["Powered by Gemini Vision"] : []), "Recheck in 5 days"]
+              : []
+          }
         />
       )}
     </FeatureShell>

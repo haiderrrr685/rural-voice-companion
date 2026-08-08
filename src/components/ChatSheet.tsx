@@ -8,7 +8,6 @@ import { useNexusState } from "@/lib/state-engine";
 import { useSpeech } from "@/hooks/use-speech";
 import { useTts } from "@/hooks/use-tts";
 import { suggestedPrompts } from "@/lib/rural";
-import { delay } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import type { AgentId } from "@/lib/nexus-engine";
 
@@ -53,8 +52,7 @@ export function ChatSheet() {
   const [typing, setTyping] = useState(false);
   const inFlightRef = useRef(false);
   const abortControllerRef = useRef<AbortController | null>(null);
-  const { listenAndDetect, listening, transcript, stop: stopListening } =
-    useSpeech();
+  const { listenAndDetect, listening, transcript, stop: stopListening } = useSpeech();
   const { speak, speaking, stop: stopTts } = useTts();
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +60,7 @@ export function ChatSheet() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typing]);
 
-  const send = async (text: string) => {
+  const send = async (text: string, languageOverride?: string) => {
     const clean = text.trim();
     if (!clean || inFlightRef.current) return; // debounce guard
 
@@ -95,7 +93,7 @@ export function ChatSheet() {
     try {
       // Run API call + minimum delay in parallel so thinking anim is visible
       const [response] = await Promise.all([
-        processMessage(clean, abortControllerRef.current?.signal),
+        processMessage(clean, abortControllerRef.current?.signal, languageOverride),
         delay(MIN_THINKING_MS),
       ]);
 
@@ -110,8 +108,7 @@ export function ChatSheet() {
       nexus.setAgent(response.agent);
       nexus.setConfidence(response.confidence);
 
-      const agentInfo =
-        AGENT_LABELS[response.agent] ?? AGENT_LABELS.general;
+      const agentInfo = AGENT_LABELS[response.agent] ?? AGENT_LABELS["general"]!;
 
       let answerText = response.answer;
       if (response.needsClarification && response.clarifyingQuestion) {
@@ -135,10 +132,10 @@ export function ChatSheet() {
 
       // TTS auto-play
       nexus.setPhase("speaking");
-      await speak(answerText, langCode);
+      await speak(answerText, languageOverride ?? langCode);
       nexus.setPhase("idle");
-    } catch (err: any) {
-      if (err.name === "AbortError") {
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") {
         console.log("[ChatSheet] Request aborted");
         setTyping(false);
         nexus.setPhase("idle");
@@ -211,7 +208,9 @@ export function ChatSheet() {
       (text, detectedLangCode) => {
         setLanguage(detectedLangCode);
         nexus.setPhase("thinking"); // Instant transition to thinking
-        send(text);
+        // State updates are asynchronous, so pass the detected code through
+        // this first request and its TTS response explicitly.
+        send(text, detectedLangCode);
       },
       t("FallbackMicPrompt", currentLocale),
       currentLocale,
@@ -249,15 +248,7 @@ export function ChatSheet() {
               <p className="text-xs text-muted-foreground">
                 <AnimatePresence mode="wait">
                   <motion.span
-                    key={
-                      listening
-                        ? "l"
-                        : speaking
-                          ? "s"
-                          : typing
-                            ? "t"
-                            : "i"
-                    }
+                    key={listening ? "l" : speaking ? "s" : typing ? "t" : "i"}
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
@@ -290,9 +281,7 @@ export function ChatSheet() {
                 <p className="text-2xl font-semibold leading-snug">
                   {t("Ask me anything.", langCode)}
                   <br />
-                  <span className="text-muted-foreground">
-                    {t("In any language.", langCode)}
-                  </span>
+                  <span className="text-muted-foreground">{t("In any language.", langCode)}</span>
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {suggestedPrompts.map((p, i) => (
@@ -318,11 +307,7 @@ export function ChatSheet() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className={
-                  m.role === "user"
-                    ? "flex justify-end"
-                    : "flex justify-start"
-                }
+                className={m.role === "user" ? "flex justify-end" : "flex justify-start"}
               >
                 <div
                   className={
@@ -351,9 +336,7 @@ export function ChatSheet() {
                       )}
                     </div>
                   )}
-                  <p className="whitespace-pre-line leading-relaxed">
-                    {m.text}
-                  </p>
+                  <p className="whitespace-pre-line leading-relaxed">{m.text}</p>
                 </div>
               </motion.div>
             ))}
@@ -389,9 +372,7 @@ export function ChatSheet() {
             <input
               value={listening ? transcript || t("Listening…", langCode) : input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) =>
-                e.key === "Enter" && !e.shiftKey && send(input)
-              }
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send(input)}
               disabled={listening}
               placeholder={t("Tap the orb and ask anything", langCode)}
               className="h-12 flex-1 rounded-full bg-card px-5 text-sm shadow-soft outline-none placeholder:text-muted-foreground disabled:opacity-60"
@@ -400,9 +381,7 @@ export function ChatSheet() {
               aria-label={listening ? "Stop listening" : "Speak"}
               onClick={handleOrbPress}
               className={`grid size-12 shrink-0 place-items-center rounded-full transition-all duration-200 ${
-                listening
-                  ? "bg-primary text-primary-foreground scale-110"
-                  : "bg-card shadow-soft"
+                listening ? "bg-primary text-primary-foreground scale-110" : "bg-card shadow-soft"
               }`}
             >
               <Mic className="size-5" />

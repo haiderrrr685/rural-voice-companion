@@ -76,9 +76,7 @@ function Market() {
             </div>
             <div className="text-right">
               <p className="text-sm font-semibold">₹{r.price.toLocaleString("en-IN")}</p>
-              <p
-                className={`text-xs ${r.change >= 0 ? "text-primary" : "text-destructive"}`}
-              >
+              <p className={`text-xs ${r.change >= 0 ? "text-primary" : "text-destructive"}`}>
                 {r.change >= 0 ? "▲" : "▼"} {Math.abs(r.change)}%
               </p>
             </div>

@@ -17,8 +17,8 @@ const AGENT_MODEL = "gemini-2.0-flash";
 
 function getApiKey(): string | null {
   try {
-    return (import.meta as Record<string, Record<string, string>>).env
-      ?.VITE_GEMINI_API_KEY ?? null;
+    const env = (import.meta as unknown as { env?: Record<string, string> }).env;
+    return env?.["VITE_GEMINI_API_KEY"] ?? null;
   } catch {
     return null;
   }
@@ -47,7 +47,7 @@ async function callGemini(
     throw new Error("NO_API_KEY");
   }
 
-  const res = await fetch(`${API_BASE}/${model}:generateContent?key=${key}`, {
+  const request: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -55,8 +55,9 @@ async function callGemini(
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature, maxOutputTokens: maxTokens },
     }),
-    signal,
-  });
+    ...(signal ? { signal } : {}),
+  };
+  const res = await fetch(`${API_BASE}/${model}:generateContent?key=${key}`, request);
 
   if (!res.ok) {
     const status = res.status;
@@ -82,7 +83,10 @@ GENERAL — anything else (health, education, market prices, stories, greetings)
 
 export type AgentCategory = "agriculture" | "government" | "general" | "emergency";
 
-export async function classifyIntent(message: string, signal?: AbortSignal): Promise<AgentCategory> {
+export async function classifyIntent(
+  message: string,
+  signal?: AbortSignal,
+): Promise<AgentCategory> {
   const result = await callGemini(message, ROUTER_SYSTEM, ROUTER_MODEL, 0.1, 10, signal);
   const lower = result.trim().toLowerCase();
   if (lower.includes("emergency")) return "emergency";
@@ -99,9 +103,19 @@ Reply with ONLY ONE WORD from this list: HINDI, MARATHI, ENGLISH, GIBBERISH. No 
 
 export type TranscriptStatus = "HINDI" | "MARATHI" | "ENGLISH" | "GIBBERISH";
 
-export async function evaluateTranscriptLanguage(transcript: string, signal?: AbortSignal): Promise<TranscriptStatus> {
+export async function evaluateTranscriptLanguage(
+  transcript: string,
+  signal?: AbortSignal,
+): Promise<TranscriptStatus> {
   try {
-    const result = await callGemini(transcript, TRANSCRIPT_EVAL_SYSTEM, ROUTER_MODEL, 0.1, 10, signal);
+    const result = await callGemini(
+      transcript,
+      TRANSCRIPT_EVAL_SYSTEM,
+      ROUTER_MODEL,
+      0.1,
+      10,
+      signal,
+    );
     const upper = result.trim().toUpperCase();
     if (upper.includes("HINDI")) return "HINDI";
     if (upper.includes("MARATHI")) return "MARATHI";
@@ -149,6 +163,9 @@ Guidelines:
 - For health emergencies: 108 (ambulance), 104 (health helpline)
 - For crop/farming questions, be helpful but mention you can give better advice if they ask specifically about farming
 - Keep responses warm, practical, and respectful`,
+
+  emergency:
+    "You are an emergency dispatcher. Give only immediate, safe directions and local emergency numbers.",
 };
 
 export async function getAgentResponse(
@@ -235,21 +252,24 @@ export async function askNexusVision(
 
   const langInstruction = `\n\nCRITICAL: Respond ONLY in ${language}. Never switch to English unless the user's language is English.`;
 
-  const res = await fetch(`${API_BASE}/${AGENT_MODEL}:generateContent?key=${key}`, {
+  const request: RequestInit = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       system_instruction: { parts: [{ text: VISION_SYSTEM + langInstruction }] },
-      contents: [{
-        parts: [
-          { inlineData: { mimeType, data: imageBase64 } },
-          { text: "Identify what's wrong with this crop and suggest treatment." },
-        ],
-      }],
+      contents: [
+        {
+          parts: [
+            { inlineData: { mimeType, data: imageBase64 } },
+            { text: "Identify what's wrong with this crop and suggest treatment." },
+          ],
+        },
+      ],
       generationConfig: { temperature: 0.4, maxOutputTokens: 1024 },
     }),
-    signal,
-  });
+    ...(signal ? { signal } : {}),
+  };
+  const res = await fetch(`${API_BASE}/${AGENT_MODEL}:generateContent?key=${key}`, request);
 
   if (!res.ok) {
     const status = res.status;
@@ -291,6 +311,6 @@ const ERROR_MESSAGES: Record<string, Record<string, string>> = {
 };
 
 export function getErrorMessage(errorCode: string, langCode: string): string {
-  const msgs = ERROR_MESSAGES[errorCode] ?? ERROR_MESSAGES.DEFAULT;
-  return msgs[langCode] ?? msgs.hi ?? msgs.en;
+  const msgs = ERROR_MESSAGES[errorCode] ?? ERROR_MESSAGES["DEFAULT"]!;
+  return msgs[langCode] ?? msgs["hi"] ?? msgs["en"]!;
 }

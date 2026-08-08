@@ -80,7 +80,7 @@ export const uiStrings: I18nDictionary = {
     ur: "بول رہا ہوں…",
     as: "কৈ আছোঁ…",
   },
-  "detected": {
+  detected: {
     en: "detected",
     hi: "पहचानी गई",
     mr: "ओळखली",
@@ -140,7 +140,7 @@ export const uiStrings: I18nDictionary = {
     ur: "صبح بخیر · آج",
     as: "সুপ্ৰভাত · আজি",
   },
-  "WeatherBrief": {
+  WeatherBrief: {
     en: "Rain expected by evening — water your crops after sunset. Wheat prices are up 3% at the nearby mandi, and a subsidy deadline is 6 days away.",
     hi: "शाम तक बारिश की संभावना — सूरज ढलने के बाद फसलों को पानी दें। पास की मंडी में गेहूं के दाम 3% बढ़े हैं, और सब्सिडी की आखिरी तारीख में 6 दिन बचे हैं।",
     mr: "संध्याकाळपर्यंत पावसाची शक्यता — सूर्यास्तानंतर पिकांना पाणी द्या. जवळच्या मंडईत गव्हाचे भाव 3% ने वाढले आहेत, आणि सबसिडीची अंतिम मुदत 6 दिवसांवर आहे.",
@@ -155,7 +155,7 @@ export const uiStrings: I18nDictionary = {
     ur: "شام تک بارش کا امکان — سورج غروب ہونے کے بعد فصلوں کو پانی دیں۔ قریبی منڈی میں گندم کی قیمتوں میں 3% اضافہ ہوا ہے، اور سبسڈی کی آخری تاریخ میں 6 دن باقی ہیں۔",
     as: "সন্ধিয়ালৈ বৰষুণৰ সম্ভাৱনা — সূৰ্যাস্তৰ পিছত শস্যত পানী দিয়ক। ওচৰৰ বজাৰত ঘেঁহুৰ দাম ৩% বৃদ্ধি পাইছে, আৰু ৰাজসাহায্যৰ অন্তিম তাৰিখলৈ ৬ দিন বাকী আছে।",
   },
-  "FallbackMicPrompt": {
+  FallbackMicPrompt: {
     en: "My crop leaves are turning yellow.",
     hi: "मेरा फसल पीला पड़ रहा है।",
     mr: "माझ्या पिकाची पाने पिवळी पडत आहेत.",
@@ -194,7 +194,7 @@ export const uiStrings: I18nDictionary = {
     en: "Tell me a story",
     hi: "मुझे एक कहानी सुनाओ",
     mr: "मला एक गोष्ट सांगा",
-  }
+  },
 };
 
 export const featuresTranslations = {
@@ -243,7 +243,7 @@ export const featuresTranslations = {
       or: "ମୋର ଚାଷ ଏବଂ ଫସଲ ପାଇଁ ସାହାଯ୍ୟ ଦରକାର",
       ur: "مجھے اپنی کھیتی باڑی اور فصلوں میں مدد کی ضرورت ہے",
       as: "মোক মোৰ খেতি আৰু শস্যৰ বাবে সহায়ৰ প্ৰয়োজন",
-    }
+    },
   },
   schemes: {
     title: {
@@ -290,7 +290,7 @@ export const featuresTranslations = {
       or: "ମୁଁ କେଉଁ ସରକାରୀ ଯୋଜନା ପାଇଁ ଆବେଦନ କରିପାରିବି?",
       ur: "میں کن سرکاری اسکیموں کے لیے درخواست دے سکتا ہوں؟",
       as: "মই কি কি চৰকাৰী আঁচনিৰ বাবে আবেদন কৰিব পাৰিম?",
-    }
+    },
   },
   documents: {
     title: {
@@ -337,7 +337,7 @@ export const featuresTranslations = {
       or: "ଗୋଟିଏ କାଗଜପତ୍ର ବୁଝିବାରେ ମୋର ସାହାଯ୍ୟ ଦରକାର",
       ur: "مجھے ایک دستاویز کو سمجھنے میں مدد کی ضرورت ہے",
       as: "মোক এখন নথি বুজিবলৈ সহায়ৰ প্ৰয়োজন",
-    }
+    },
   },
   health: {
     title: {
@@ -384,7 +384,7 @@ export const featuresTranslations = {
       or: "ମୋର ସ୍ୱାସ୍ଥ୍ୟ ପରାମର୍ଶ ଦରକାର",
       ur: "مجھے صحت سے متعلق مشورہ درکار ہے",
       as: "মোক স্বাস্থ্যৰ পৰামৰ্শৰ প্ৰয়োজন",
-    }
+    },
   },
   market: {
     title: {
@@ -431,7 +431,7 @@ export const featuresTranslations = {
       or: "ଆଜିର ବଜାର ଦର କଣ ଅଛି?",
       ur: "آج کے منڈی کے بھاؤ کیا ہیں؟",
       as: "আজিৰ বজাৰৰ দাম কি?",
-    }
+    },
   },
   education: {
     title: {
@@ -478,7 +478,7 @@ export const featuresTranslations = {
       or: "ମୋ ପିଲାର ପାଠପଢାରେ ସାହାଯ୍ୟ କରନ୍ତୁ",
       ur: "میرے بچے کی پڑھائی میں مدد کریں",
       as: "মোৰ সন্তানৰ পঢ়া-শুনাত সহায় কৰক",
-    }
+    },
   },
   emergency: {
     title: {
@@ -525,8 +525,8 @@ export const featuresTranslations = {
       or: "ମୋତେ ଜରୁରୀକାଳୀନ ସାହାଯ୍ୟ ଦରକାର",
       ur: "مجھے ہنگامی مدد چاہیے",
       as: "মোক জৰুৰীকালীন সহায়ৰ প্ৰয়োজন",
-    }
-  }
+    },
+  },
 };
 
 /**
@@ -535,8 +535,9 @@ export const featuresTranslations = {
  */
 export function t(key: string, langCode: string): string {
   const shortCode = langCode.split("-")[0] || "en";
-  if (uiStrings[key]) {
-    return uiStrings[key][shortCode] || uiStrings[key].en || key;
+  const values = uiStrings[key];
+  if (values) {
+    return values[shortCode] || values["en"] || key;
   }
   return key;
 }
@@ -544,11 +545,16 @@ export function t(key: string, langCode: string): string {
 /**
  * Returns localized feature strings based on language.
  */
-export function tFeature(slug: string, property: "title" | "desc" | "seed", langCode: string): string {
+export function tFeature(
+  slug: string,
+  property: "title" | "desc" | "seed",
+  langCode: string,
+): string {
   const shortCode = langCode.split("-")[0] || "en";
-  const feature = (featuresTranslations as any)[slug];
-  if (feature && feature[property]) {
-    return feature[property][shortCode] || feature[property].en || "";
+  const feature = featuresTranslations[slug as keyof typeof featuresTranslations];
+  const translations = feature?.[property] as Record<string, string> | undefined;
+  if (translations) {
+    return translations[shortCode] || translations["en"] || "";
   }
   return "";
 }

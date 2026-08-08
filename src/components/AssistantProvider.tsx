@@ -1,22 +1,13 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useMemo, useState, useCallback, type ReactNode } from "react";
 import { processQuery, type AgentResponse } from "@/lib/nexus-engine";
 import {
   detectLanguageFromText,
+  normaliseLanguageCode,
+  getLanguageInfo,
   type LanguageInfo,
   SUPPORTED_LANGUAGES,
 } from "@/lib/language-detect";
-import {
-  isGeminiConfigured,
-  processWithGemini,
-  getErrorMessage,
-} from "@/lib/gemini";
+import { isGeminiConfigured, processWithGemini, getErrorMessage } from "@/lib/gemini";
 import { saveExchange } from "@/lib/offline-cache";
 
 type AssistantState = {
@@ -26,11 +17,17 @@ type AssistantState = {
   languageConfirmed: boolean;
   setLanguage: (code: string) => void;
   confirmLanguage: () => void;
-  detectLanguage: (
-    text: string,
-  ) => { langCode: string; confidence: string; languageInfo: LanguageInfo };
+  detectLanguage: (text: string) => {
+    langCode: string;
+    confidence: string;
+    languageInfo: LanguageInfo;
+  };
   /** Process a user message — tries Gemini API, falls back to local engine */
-  processMessage: (text: string, signal?: AbortSignal) => Promise<AgentResponse>;
+  processMessage: (
+    text: string,
+    signal?: AbortSignal,
+    languageOverride?: string,
+  ) => Promise<AgentResponse>;
   chatOpen: boolean;
   openChat: (seed?: string) => void;
   closeChat: () => void;
@@ -46,15 +43,15 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   const [chatOpen, setChatOpen] = useState(false);
   const [seed, setSeed] = useState<string | null>(null);
 
-  const languageInfo =
-    SUPPORTED_LANGUAGES[langCode] ?? SUPPORTED_LANGUAGES.hi;
+  const languageInfo = getLanguageInfo(langCode);
   const language = languageInfo.name;
 
   const setLanguage = useCallback((code: string) => {
+    const normalised = normaliseLanguageCode(code);
     console.log(
-      `[LANG-DEBUG] State: langCode="${code}" (${SUPPORTED_LANGUAGES[code]?.name ?? code})`,
+      `[LANG-DEBUG] State: langCode="${normalised}" (${getLanguageInfo(normalised).name})`,
     );
-    setLangCode(code);
+    setLangCode(normalised);
   }, []);
 
   const confirmLanguage = useCallback(() => {
@@ -73,18 +70,21 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   );
 
   const processMessage = useCallback(
-    async (text: string, signal?: AbortSignal): Promise<AgentResponse> => {
+    async (
+      text: string,
+      signal?: AbortSignal,
+      languageOverride?: string,
+    ): Promise<AgentResponse> => {
       // Detect language from incoming text
       const detection = detectLanguageFromText(text);
-      let currentLangCode = langCode;
+      let currentLangCode = languageOverride ? normaliseLanguageCode(languageOverride) : langCode;
 
-      if (detection.confidence !== "low") {
+      if (!languageOverride && detection.confidence !== "low") {
         currentLangCode = detection.langCode;
         setLangCode(detection.langCode);
       }
 
-      const currentLangInfo =
-        SUPPORTED_LANGUAGES[currentLangCode] ?? SUPPORTED_LANGUAGES.hi;
+      const currentLangInfo = getLanguageInfo(currentLangCode);
       const targetLanguage = currentLangInfo.name;
 
       console.log(
@@ -96,12 +96,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
         try {
           const geminiResult = await processWithGemini(text, targetLanguage, signal);
 
-          saveExchange(
-            text,
-            geminiResult.answer,
-            geminiResult.agent,
-            targetLanguage,
-          );
+          saveExchange(text, geminiResult.answer, geminiResult.agent, targetLanguage);
 
           return {
             answer: geminiResult.answer,
@@ -111,8 +106,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
             clarifyingQuestion: null,
           };
         } catch (err) {
-          const errorCode =
-            err instanceof Error ? err.message : "DEFAULT";
+          const errorCode = err instanceof Error ? err.message : "DEFAULT";
           console.warn(`[Gemini] Failed (${errorCode}), using local fallback`);
 
           // If it's a real API error (not just missing key), return error message
@@ -175,7 +169,6 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
 
 export function useAssistant() {
   const ctx = useContext(Ctx);
-  if (!ctx)
-    throw new Error("useAssistant must be used inside AssistantProvider");
+  if (!ctx) throw new Error("useAssistant must be used inside AssistantProvider");
   return ctx;
 }

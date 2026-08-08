@@ -7,43 +7,86 @@ import { useAssistant } from "@/components/AssistantProvider";
 import { useNexusState } from "@/lib/state-engine";
 import { useSpeech } from "@/hooks/use-speech";
 import { features, greetings } from "@/lib/rural";
-import { SUPPORTED_LANGUAGES } from "@/lib/language-detect";
+import {
+  getConfirmationPrompt,
+  getLanguageInfo,
+  isAffirmative,
+  isNegative,
+} from "@/lib/language-detect";
 import { t, tFeature } from "@/lib/i18n";
+import { useTts } from "@/hooks/use-tts";
 
-export const Route = createFileRoute("/")(
-  {
-    head: () => ({
-      meta: [
-        { title: "Rural AI — Speak in any language" },
-        {
-          name: "description",
-          content:
-            "Tap the orb and speak. Rural AI understands your language and helps with crops, government schemes, documents, health, markets and more.",
-        },
-        { property: "og:title", content: "Rural AI — Speak in any language" },
-        {
-          property: "og:description",
-          content:
-            "A voice-first AI companion for rural India. One assistant, many specialists, zero complexity.",
-        },
-      ],
-    }),
-    component: Index,
-  },
-);
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Rural AI — Speak in any language" },
+      {
+        name: "description",
+        content:
+          "Tap the orb and speak. Rural AI understands your language and helps with crops, government schemes, documents, health, markets and more.",
+      },
+      { property: "og:title", content: "Rural AI — Speak in any language" },
+      {
+        property: "og:description",
+        content:
+          "A voice-first AI companion for rural India. One assistant, many specialists, zero complexity.",
+      },
+    ],
+  }),
+  component: Index,
+});
 
 type Phase = "welcome" | "listening" | "detected" | "home";
 
 function Index() {
   const [phase, setPhase] = useState<Phase>("welcome");
   const [detectedLangName, setDetectedLangName] = useState("Hindi");
-  const { setLanguage, confirmLanguage, openChat, languageInfo, langCode } =
-    useAssistant();
+  const [pendingConfirmation, setPendingConfirmation] = useState<{
+    text: string;
+    code: string;
+  } | null>(null);
+  const { setLanguage, confirmLanguage, openChat, languageInfo, langCode } = useAssistant();
   const nexus = useNexusState();
-  const { listenAndDetect, listening, transcript } = useSpeech();
+  const { listen, listenAndDetect, listening, transcript } = useSpeech();
+  const { speak } = useTts();
   const navigate = useNavigate();
 
+  const completeFirstInteraction = (text: string) => {
+    confirmLanguage();
+    setPendingConfirmation(null);
+    nexus.setPhase("success");
+    setPhase("detected");
+    setTimeout(() => {
+      nexus.setPhase("idle");
+      setPhase("home");
+      openChat(text);
+    }, 1400);
+  };
+
   const start = () => {
+    if (pendingConfirmation) {
+      const locale = getLanguageInfo(pendingConfirmation.code).code;
+      nexus.setPhase("listening");
+      listen(
+        (answer) => {
+          if (isAffirmative(answer)) {
+            completeFirstInteraction(pendingConfirmation.text);
+            return;
+          }
+          if (isNegative(answer)) {
+            setPendingConfirmation(null);
+            nexus.setPhase("idle");
+            setPhase("welcome");
+            return;
+          }
+          void speak(getConfirmationPrompt(pendingConfirmation.code), pendingConfirmation.code);
+        },
+        "",
+        locale,
+      );
+      return;
+    }
+
     if (phase !== "welcome") return;
     setPhase("listening");
     nexus.setPhase("listening");
@@ -51,22 +94,20 @@ function Index() {
     const initialLocale = languageInfo?.code ?? "hi-IN";
 
     listenAndDetect(
-      (text, detectedCode) => {
-        const langInfo = SUPPORTED_LANGUAGES[detectedCode] ?? SUPPORTED_LANGUAGES.hi;
+      (text, detectedCode, confidence) => {
+        const langInfo = getLanguageInfo(detectedCode);
 
         setLanguage(detectedCode);
         setDetectedLangName(langInfo.name);
-        confirmLanguage();
+        if (confidence === "low") {
+          setPendingConfirmation({ text, code: detectedCode });
+          nexus.setPhase("success");
+          setPhase("detected");
+          void speak(getConfirmationPrompt(detectedCode), detectedCode);
+          return;
+        }
 
-        nexus.setPhase("success");
-        setPhase("detected");
-        setTimeout(() => {
-          nexus.setPhase("idle");
-          setPhase("home");
-
-          // Send the first message to the chat sheet
-          openChat(text);
-        }, 1400);
+        completeFirstInteraction(text);
       },
       t("FallbackMicPrompt", initialLocale),
       initialLocale,
@@ -76,8 +117,9 @@ function Index() {
   const isHome = phase === "home";
 
   const handleCardTap = (feature: (typeof features)[number]) => {
-    // Emergency and agriculture navigate to their own routes
-    const directRoutes = ["emergency", "agriculture"];
+    // Emergency remains a dedicated safety screen. Every assistant card uses
+    // the same conversation flow, so users never have to choose a mode.
+    const directRoutes = ["emergency"];
     if (directRoutes.includes(feature.slug)) {
       navigate({ to: `/${feature.slug}` });
       return;
@@ -115,16 +157,10 @@ function Index() {
           >
             {greetings.map((g, i) => {
               const x = Number(
-                Math.min(
-                  88,
-                  Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42),
-                ).toFixed(2),
+                Math.min(88, Math.max(12, 50 + Math.cos(g.angle) * g.radius * 42)).toFixed(2),
               );
               const y = Number(
-                Math.min(
-                  92,
-                  Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44),
-                ).toFixed(2),
+                Math.min(92, Math.max(8, 50 + Math.sin(g.angle) * g.radius * 44)).toFixed(2),
               );
               const opacity = Math.max(0.12, 1.35 - g.radius * 1.15);
               return (
@@ -192,11 +228,7 @@ function Index() {
               className="mt-8 max-w-xs text-center text-sm text-muted-foreground"
             >
               {t("Listening…", langCode)}
-              {transcript && (
-                <span className="mt-2 block text-foreground">
-                  "{transcript}"
-                </span>
-              )}
+              {transcript && <span className="mt-2 block text-foreground">"{transcript}"</span>}
             </motion.p>
           )}
           {phase === "detected" && (
@@ -296,7 +328,9 @@ function Index() {
                   >
                     {f.emoji}
                   </span>
-                  <p className="mt-3 text-sm font-semibold">{tFeature(f.slug, "title", langCode) || f.title}</p>
+                  <p className="mt-3 text-sm font-semibold">
+                    {tFeature(f.slug, "title", langCode) || f.title}
+                  </p>
                   <p className="mt-1 text-xs leading-snug text-muted-foreground">
                     {tFeature(f.slug, "desc", langCode) || f.desc}
                   </p>

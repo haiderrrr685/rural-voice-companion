@@ -47,13 +47,13 @@ For example:
 
 The AI automatically detects:
 
-•⁠  ⁠Language
+•⁠ ⁠Language
 
-•⁠  ⁠Dialect (where possible)
+•⁠ ⁠Dialect (where possible)
 
-•⁠  ⁠Preferred voice
+•⁠ ⁠Preferred voice
 
-•⁠  ⁠Preferred UI language
+•⁠ ⁠Preferred UI language
 
 Within a second, the interface smoothly transitions into that language.
 
@@ -85,17 +85,17 @@ Users can tap it at any time to ask absolutely anything.
 
 Examples:
 
-•⁠  ⁠Tell me a story.
+•⁠ ⁠Tell me a story.
 
-•⁠  ⁠Explain rainfall.
+•⁠ ⁠Explain rainfall.
 
-•⁠  ⁠Help me calculate fertilizer.
+•⁠ ⁠Help me calculate fertilizer.
 
-•⁠  ⁠Write a letter.
+•⁠ ⁠Write a letter.
 
-•⁠  ⁠Solve my child’s homework.
+•⁠ ⁠Solve my child’s homework.
 
-•⁠  ⁠Translate this sentence.
+•⁠ ⁠Translate this sentence.
 
 This is the general-purpose AI.
 
@@ -133,35 +133,35 @@ This is the most important feature.
 
 Capabilities:
 
-•⁠  ⁠Crop disease detection from images
+•⁠ ⁠Crop disease detection from images
 
-•⁠  ⁠Pest identification
+•⁠ ⁠Pest identification
 
-•⁠  ⁠Nutrient deficiency analysis
+•⁠ ⁠Nutrient deficiency analysis
 
-•⁠  ⁠Irrigation advice
+•⁠ ⁠Irrigation advice
 
-•⁠  ⁠Fertilizer recommendations
+•⁠ ⁠Fertilizer recommendations
 
-•⁠  ⁠Organic alternatives
+•⁠ ⁠Organic alternatives
 
-•⁠  ⁠Crop planning
+•⁠ ⁠Crop planning
 
-•⁠  ⁠Seasonal guidance
+•⁠ ⁠Seasonal guidance
 
-•⁠  ⁠Weather-based farming advice
+•⁠ ⁠Weather-based farming advice
 
-•⁠  ⁠Soil-related recommendations
+•⁠ ⁠Soil-related recommendations
 
-•⁠  ⁠Harvest timing suggestions
+•⁠ ⁠Harvest timing suggestions
 
 Future:
 
-•⁠  ⁠Satellite insights
+•⁠ ⁠Satellite insights
 
-•⁠  ⁠Farm record keeping
+•⁠ ⁠Farm record keeping
 
-•⁠  ⁠Yield prediction
+•⁠ ⁠Yield prediction
 
 ⸻
 
@@ -173,25 +173,25 @@ The AI simplifies everything.
 
 Capabilities:
 
-•⁠  ⁠Find eligible schemes
+•⁠ ⁠Find eligible schemes
 
-•⁠  ⁠Explain schemes simply
+•⁠ ⁠Explain schemes simply
 
-•⁠  ⁠Required documents
+•⁠ ⁠Required documents
 
-•⁠  ⁠Application guidance
+•⁠ ⁠Application guidance
 
-•⁠  ⁠Deadline reminders
+•⁠ ⁠Deadline reminders
 
-•⁠  ⁠Pension information
+•⁠ ⁠Pension information
 
-•⁠  ⁠Subsidies
+•⁠ ⁠Subsidies
 
-•⁠  ⁠Scholarships
+•⁠ ⁠Scholarships
 
-•⁠  ⁠Insurance schemes
+•⁠ ⁠Insurance schemes
 
-•⁠  ⁠Farmer welfare schemes
+•⁠ ⁠Farmer welfare schemes
 
 Instead of searching government websites, users simply ask naturally.
 
@@ -203,33 +203,33 @@ Many rural users struggle with official paperwork.
 
 Users upload:
 
-•⁠  ⁠Land papers
+•⁠ ⁠Land papers
 
-•⁠  ⁠Aadhaar-related notices
+•⁠ ⁠Aadhaar-related notices
 
-•⁠  ⁠Bank letters
+•⁠ ⁠Bank letters
 
-•⁠  ⁠Government circulars
+•⁠ ⁠Government circulars
 
-•⁠  ⁠Medical reports
+•⁠ ⁠Medical reports
 
-•⁠  ⁠Electricity bills
+•⁠ ⁠Electricity bills
 
-•⁠  ⁠Legal notices
+•⁠ ⁠Legal notices
 
 The AI:
 
-•⁠  ⁠Reads the document
+•⁠ ⁠Reads the document
 
-•⁠  ⁠Explains it in simple language
+•⁠ ⁠Explains it in simple language
 
-•⁠  ⁠Summarizes it
+•⁠ ⁠Summarizes it
 
-•⁠  ⁠Highlights important dates
+•⁠ ⁠Highlights important dates
 
-•⁠  ⁠Warns about missing documents
+•⁠ ⁠Warns about missing documents
 
-•⁠  ⁠Translates it if needed
+•⁠ ⁠Translates it if needed
 
 ⸻
 
@@ -239,23 +239,23 @@ Not for diagnosis, but for accessible healthcare guidance.
 
 Capabilities:
 
-•⁠  ⁠Explain symptoms
+•⁠ ⁠Explain symptoms
 
-•⁠  ⁠Basic first aid
+•⁠ ⁠Basic first aid
 
-•⁠  ⁠Maternal care
+•⁠ ⁠Maternal care
 
-•⁠  ⁠Child healthcare
+•⁠ ⁠Child healthcare
 
-•⁠  ⁠Vaccination schedules
+•⁠ ⁠Vaccination schedules
 
-•⁠  ⁠Nutrition guidance
+•⁠ ⁠Nutrition guidance
 
-•⁠  ⁠Medicine reminders
+•⁠ ⁠Medicine reminders
 
-•⁠  ⁠Nearby health center suggestions
+•⁠ ⁠Nearby health center suggestions
 
-•⁠  ⁠Emergency instructions
+•⁠ ⁠Emergency instructions
 
 ⸻
 
@@ -265,19 +265,19 @@ Designed for farmers and small business owners.
 
 Capabilities:
 
-•⁠  ⁠Crop prices
+•⁠ ⁠Crop prices
 
-•⁠  ⁠Nearby mandi prices
+•⁠ ⁠Nearby mandi prices
 
-•⁠  ⁠Price trends
+•⁠ ⁠Price trends
 
-•⁠  ⁠Selling recommendations
+•⁠ ⁠Selling recommendations
 
-•⁠  ⁠Profit estimation
+•⁠ ⁠Profit estimation
 
-•⁠  ⁠Weather impact on pricing
+•⁠ ⁠Weather impact on pricing
 
-•⁠  ⁠Demand insights
+•⁠ ⁠Demand insights
 
 ⸻
 
@@ -287,19 +287,19 @@ Supports both children and adults.
 
 Capabilities:
 
-•⁠  ⁠Homework help
+•⁠ ⁠Homework help
 
-•⁠  ⁠Explain concepts simply
+•⁠ ⁠Explain concepts simply
 
-•⁠  ⁠Spoken learning
+•⁠ ⁠Spoken learning
 
-•⁠  ⁠Practice quizzes
+•⁠ ⁠Practice quizzes
 
-•⁠  ⁠Scholarship information
+•⁠ ⁠Scholarship information
 
-•⁠  ⁠Career guidance
+•⁠ ⁠Career guidance
 
-•⁠  ⁠Digital literacy
+•⁠ ⁠Digital literacy
 
 ⸻
 
@@ -309,19 +309,19 @@ For animal care.
 
 Capabilities:
 
-•⁠  ⁠Animal disease identification
+•⁠ ⁠Animal disease identification
 
-•⁠  ⁠Feed recommendations
+•⁠ ⁠Feed recommendations
 
-•⁠  ⁠Vaccination reminders
+•⁠ ⁠Vaccination reminders
 
-•⁠  ⁠Milk production guidance
+•⁠ ⁠Milk production guidance
 
-•⁠  ⁠Breeding information
+•⁠ ⁠Breeding information
 
-•⁠  ⁠Veterinary advice
+•⁠ ⁠Veterinary advice
 
-•⁠  ⁠Image-based analysis
+•⁠ ⁠Image-based analysis
 
 ⸻
 
@@ -331,19 +331,19 @@ One dedicated emergency space.
 
 Capabilities:
 
-•⁠  ⁠Emergency numbers
+•⁠ ⁠Emergency numbers
 
-•⁠  ⁠Disaster guidance
+•⁠ ⁠Disaster guidance
 
-•⁠  ⁠First aid
+•⁠ ⁠First aid
 
-•⁠  ⁠Nearby hospitals
+•⁠ ⁠Nearby hospitals
 
-•⁠  ⁠Women’s safety contacts
+•⁠ ⁠Women’s safety contacts
 
-•⁠  ⁠Ambulance information
+•⁠ ⁠Ambulance information
 
-•⁠  ⁠Flood and weather alerts
+•⁠ ⁠Flood and weather alerts
 
 ⸻
 
@@ -353,13 +353,13 @@ The app is designed assuming many users will never type.
 
 Every feature supports:
 
-•⁠  ⁠Voice input
+•⁠ ⁠Voice input
 
-•⁠  ⁠Voice responses
+•⁠ ⁠Voice responses
 
-•⁠  ⁠Local language conversations
+•⁠ ⁠Local language conversations
 
-•⁠  ⁠Natural speech
+•⁠ ⁠Natural speech
 
 Typing is optional.
 
@@ -371,21 +371,21 @@ The camera becomes another way to communicate.
 
 Users can point it at:
 
-•⁠  ⁠Crops
+•⁠ ⁠Crops
 
-•⁠  ⁠Documents
+•⁠ ⁠Documents
 
-•⁠  ⁠Medicine strips
+•⁠ ⁠Medicine strips
 
-•⁠  ⁠Government notices
+•⁠ ⁠Government notices
 
-•⁠  ⁠Machinery
+•⁠ ⁠Machinery
 
-•⁠  ⁠Livestock
+•⁠ ⁠Livestock
 
-•⁠  ⁠Bills
+•⁠ ⁠Bills
 
-•⁠  ⁠Fertilizer bags
+•⁠ ⁠Fertilizer bags
 
 The AI understands the image and responds conversationally.
 
@@ -399,13 +399,13 @@ The app should continue working gracefully.
 
 Capabilities:
 
-•⁠  ⁠Cache previous conversations
+•⁠ ⁠Cache previous conversations
 
-•⁠  ⁠Queue voice requests
+•⁠ ⁠Queue voice requests
 
-•⁠  ⁠Sync automatically when internet returns
+•⁠ ⁠Sync automatically when internet returns
 
-•⁠  ⁠Show offline status clearly
+•⁠ ⁠Show offline status clearly
 
 ⸻
 
@@ -413,17 +413,17 @@ Personalization
 
 The AI gradually learns:
 
-•⁠  ⁠Preferred language
+•⁠ ⁠Preferred language
 
-•⁠  ⁠Village
+•⁠ ⁠Village
 
-•⁠  ⁠Crops grown
+•⁠ ⁠Crops grown
 
-•⁠  ⁠Family members
+•⁠ ⁠Family members
 
-•⁠  ⁠Frequently used services
+•⁠ ⁠Frequently used services
 
-•⁠  ⁠Common questions
+•⁠ ⁠Common questions
 
 This enables more useful suggestions over time.
 
@@ -437,21 +437,21 @@ Examples:
 
 Morning:
 
-•⁠  ⁠Rain expected today.
+•⁠ ⁠Rain expected today.
 
-•⁠  ⁠Water your crops after sunset.
+•⁠ ⁠Water your crops after sunset.
 
-•⁠  ⁠Market prices have increased.
+•⁠ ⁠Market prices have increased.
 
-•⁠  ⁠A subsidy deadline is approaching.
+•⁠ ⁠A subsidy deadline is approaching.
 
 During the vaccination period:
 
-•⁠  ⁠Your livestock vaccination is due.
+•⁠ ⁠Your livestock vaccination is due.
 
 During harvest:
 
-•⁠  ⁠Best nearby market today.
+•⁠ ⁠Best nearby market today.
 
 The home screen becomes proactive instead of reactive.
 
@@ -471,29 +471,29 @@ The goal is to create a believable, interactive prototype that feels like a real
 
 Design Language
 
-•⁠  ⁠Minimal
+•⁠ ⁠Minimal
 
-•⁠  ⁠Apple-inspired
+•⁠ ⁠Apple-inspired
 
-•⁠  ⁠Soft white background (#FAFAFA)
+•⁠ ⁠Soft white background (#FAFAFA)
 
-•⁠  ⁠Blue accent (#4A7DFF)
+•⁠ ⁠Blue accent (#4A7DFF)
 
-•⁠  ⁠Glassmorphism only where subtle
+•⁠ ⁠Glassmorphism only where subtle
 
-•⁠  ⁠Large whitespace
+•⁠ ⁠Large whitespace
 
-•⁠  ⁠Rounded corners (24-32px)
+•⁠ ⁠Rounded corners (24-32px)
 
-•⁠  ⁠SF Pro / Inter font
+•⁠ ⁠SF Pro / Inter font
 
-•⁠  ⁠No clutter
+•⁠ ⁠No clutter
 
-•⁠  ⁠Premium, calm and approachable
+•⁠ ⁠Premium, calm and approachable
 
-•⁠  ⁠Everything should feel effortless
+•⁠ ⁠Everything should feel effortless
 
-----------------------------------
+---
 
 PAGE 1 — Welcome Screen
 
@@ -577,7 +577,7 @@ At the bottom display
 
 with a microphone icon.
 
-----------------------------------
+---
 
 Interaction
 
@@ -603,7 +603,7 @@ Then
 
 Animate this smoothly.
 
-----------------------------------
+---
 
 Transition
 
@@ -619,7 +619,7 @@ Feature cards animate in around the orb with staggered spring animations.
 
 This transition should feel premium.
 
-----------------------------------
+---
 
 PAGE 2 — AI Home
 
@@ -663,7 +663,7 @@ Hover animation
 
 Tap animation
 
-----------------------------------
+---
 
 General AI
 
@@ -693,7 +693,7 @@ Examples
 
 "Help my child study"
 
-----------------------------------
+---
 
 Feature Cards
 
@@ -759,7 +759,7 @@ First aid
 
 Nearby services (dummy)
 
-----------------------------------
+---
 
 Architecture
 
@@ -779,7 +779,7 @@ Use Framer Motion for animations.
 
 Keep code clean and modular.
 
-----------------------------------
+---
 
 Animations
 
@@ -805,7 +805,7 @@ Micro interactions
 
 No flashy effects.
 
-----------------------------------
+---
 
 Prototype Requirements
 

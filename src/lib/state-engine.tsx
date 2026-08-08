@@ -18,13 +18,7 @@ import {
 } from "react";
 
 export type NexusPhase =
-  | "idle"
-  | "listening"
-  | "thinking"
-  | "processing"
-  | "success"
-  | "error"
-  | "speaking";
+  "idle" | "listening" | "thinking" | "processing" | "success" | "error" | "speaking";
 
 export type ActiveAgent = "agriculture" | "government" | "general" | null;
 export type Confidence = "high" | "medium" | "low";
@@ -97,7 +91,6 @@ export function NexusStateProvider({ children }: { children: ReactNode }) {
 
 export function useNexusState(): NexusContext {
   const ctx = useContext(Ctx);
-  if (!ctx)
-    throw new Error("useNexusState must be used inside NexusStateProvider");
+  if (!ctx) throw new Error("useNexusState must be used inside NexusStateProvider");
   return ctx;
 }

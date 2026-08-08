@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { evaluateTranscriptLanguage } from "@/lib/gemini";
+import {
+  detectLanguageFromText,
+  normaliseLanguageCode,
+  type LanguageCode,
+} from "@/lib/language-detect";
 
 type Recognition = {
   start: () => void;
@@ -49,12 +54,7 @@ export function useSpeech() {
   }, []);
 
   const recognizeWithLocale = useCallback(
-    (
-      locale: string,
-      onResult: (text: string) => void,
-      fallbackText: string,
-      timeoutMs = 8000,
-    ) => {
+    (locale: string, onResult: (text: string) => void, fallbackText: string, timeoutMs = 8000) => {
       const Ctor = getRecognitionCtor();
       if (!Ctor) {
         // Simulated fallback for dev environments without SpeechRecognition
@@ -125,11 +125,7 @@ export function useSpeech() {
   );
 
   const listen = useCallback(
-    (
-      onDone: (text: string) => void,
-      fallbackText: string,
-      locale = "hi-IN",
-    ) => {
+    (onDone: (text: string) => void, fallbackText: string, locale = "hi-IN") => {
       setTranscript("");
       setListening(true);
       recognizeWithLocale(locale, onDone, fallbackText);
@@ -139,45 +135,65 @@ export function useSpeech() {
 
   const listenAndDetect = useCallback(
     (
-      onDone: (text: string, detectedLangCode: string) => void,
+      onDone: (
+        text: string,
+        detectedLangCode: LanguageCode,
+        confidence: "high" | "medium" | "low",
+      ) => void,
       fallbackText: string,
-      initialLocale = "hi-IN", // Unused now, but kept for signature compatibility
+      initialLocale = "hi-IN",
     ) => {
       setTranscript("");
       setListening(true);
 
-      const locales = ["hi-IN", "mr-IN", "en-IN"];
-      const results: { transcript: string; status: string; locale: string }[] = [];
+      // Start with the session/default locale, then test the languages promised
+      // by this voice-first prototype. A successful evaluation returns a short
+      // app language code, never a BCP-47 locale.
+      const locales = Array.from(new Set([initialLocale, "hi-IN", "mr-IN", "en-IN"]));
+      const results: { transcript: string; locale: string }[] = [];
 
       const attempt = async (index: number) => {
         if (index >= locales.length) {
           // All attempts failed (all gibberish or empty). Fall back to the longest transcript.
           const best = results.reduce(
             (prev, curr) => (curr.transcript.length > prev.transcript.length ? curr : prev),
-            results[0]
+            { transcript: fallbackText, locale: initialLocale },
           );
-          console.log(`[LANG-DEBUG] All retries exhausted. Falling back to longest transcript from "${best.locale}"`);
-          onDone(best.transcript, best.locale);
+          const detected = detectLanguageFromText(best.transcript);
+          onDone(best.transcript, normaliseLanguageCode(best.locale), detected.confidence);
           return;
         }
 
-        const locale = locales[index];
+        const locale = locales[index] ?? initialLocale;
 
         recognizeWithLocale(
           locale,
           async (text) => {
             const status = await evaluateTranscriptLanguage(text);
-            console.log(`[LANG-DEBUG] Attempt ${index + 1}: tried "${locale}", got: "${text}", Gemini says: ${status}`);
+            console.log(
+              `[LANG-DEBUG] Attempt ${index + 1}: tried "${locale}", got: "${text}", Gemini says: ${status}`,
+            );
 
-            results.push({ transcript: text, status, locale });
+            results.push({ transcript: text, locale });
 
             if (status === "GIBBERISH") {
               setTranscript("");
               setListening(true);
               attempt(index + 1);
             } else {
-              // Found a coherent transcript
-              onDone(text, locale);
+              // Gemini's evaluator identifies the spoken language; do not
+              // confuse the recognition locale (e.g. mr-IN) with app state.
+              const languageByStatus: Record<Exclude<typeof status, "GIBBERISH">, LanguageCode> = {
+                HINDI: "hi",
+                MARATHI: "mr",
+                ENGLISH: "en",
+              };
+              const detected = detectLanguageFromText(text);
+              onDone(
+                text,
+                languageByStatus[status],
+                detected.confidence === "low" ? "medium" : detected.confidence,
+              );
             }
           },
           fallbackText,

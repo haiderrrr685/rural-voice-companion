@@ -47,7 +47,10 @@ function pick(lang: LangKey, en: string, hi: string, mr?: string): string {
 const AGRICULTURE_KEYWORDS: Array<[RegExp, number]> = [
   // English
   [/\b(crop|crops)\b/i, 3],
-  [/\b(wheat|rice|paddy|maize|bajra|jowar|ragi|sugarcane|cotton|soybean|mustard|groundnut|sunflower)\b/i, 4],
+  [
+    /\b(wheat|rice|paddy|maize|bajra|jowar|ragi|sugarcane|cotton|soybean|mustard|groundnut|sunflower)\b/i,
+    4,
+  ],
   [/\b(tomato|onion|potato|brinjal|chilli|okra|cauliflower|cabbage|pea|bean|lentil|dal)\b/i, 3],
   [/\b(leaf|leaves|yellow|brown|spots?|wilt|rot|blight|rust|mildew)\b/i, 3],
   [/\b(pest|insect|worm|caterpillar|aphid|whitefly|borer|mite|fungus|fungi)\b/i, 4],
@@ -178,83 +181,182 @@ export const SCHEMES_DATA = [
     fullNameHi: "प्रधानमंत्री किसान सम्मान निधि",
     benefit: "₹6,000 per year, paid in 3 instalments of ₹2,000 directly to bank account",
     benefitHi: "साल में ₹6,000, 3 किस्तों में ₹2,000 सीधे बैंक खाते में",
-    eligibility: "All landholding farmer families (subject to certain exclusion criteria). Both small and marginal farmers eligible.",
+    eligibility:
+      "All landholding farmer families (subject to certain exclusion criteria). Both small and marginal farmers eligible.",
     eligibilityHi: "सभी जमीन वाले किसान परिवार (कुछ अपवाद हैं)। छोटे और सीमांत किसान भी पात्र।",
-    documents: "Aadhaar card, land ownership records (khasra/khatauni), bank account passbook, mobile number",
+    documents:
+      "Aadhaar card, land ownership records (khasra/khatauni), bank account passbook, mobile number",
     documentsHi: "आधार कार्ड, जमीन के कागज (खसरा/खतौनी), बैंक पासबुक, मोबाइल नंबर",
-    howToApply: "Visit your local Common Service Centre (CSC), or apply online at pmkisan.gov.in. Your village patwari or lekhpal can help with land records.",
-    howToApplyHi: "नज़दीकी जन सेवा केंद्र (CSC) जाएं, या pmkisan.gov.in पर ऑनलाइन करें। गांव के पटवारी या लेखपाल जमीन के कागज में मदद कर सकते हैं।",
-    keywords: ["pm kisan", "pmkisan", "6000", "income support", "kisan samman", "instalment", "किसान सम्मान", "पीएम किसान"],
+    howToApply:
+      "Visit your local Common Service Centre (CSC), or apply online at pmkisan.gov.in. Your village patwari or lekhpal can help with land records.",
+    howToApplyHi:
+      "नज़दीकी जन सेवा केंद्र (CSC) जाएं, या pmkisan.gov.in पर ऑनलाइन करें। गांव के पटवारी या लेखपाल जमीन के कागज में मदद कर सकते हैं।",
+    keywords: [
+      "pm kisan",
+      "pmkisan",
+      "6000",
+      "income support",
+      "kisan samman",
+      "instalment",
+      "किसान सम्मान",
+      "पीएम किसान",
+    ],
   },
   {
     name: "PMFBY",
     fullName: "Pradhan Mantri Fasal Bima Yojana (Crop Insurance)",
     fullNameHi: "प्रधानमंत्री फसल बीमा योजना",
-    benefit: "Crop insurance at low premium — 2% for kharif, 1.5% for rabi, 5% for commercial/horticultural crops",
+    benefit:
+      "Crop insurance at low premium — 2% for kharif, 1.5% for rabi, 5% for commercial/horticultural crops",
     benefitHi: "कम प्रीमियम पर फसल बीमा — खरीफ 2%, रबी 1.5%, बागवानी 5%",
-    eligibility: "All farmers growing notified crops in notified areas. Both loanee and non-loanee farmers.",
-    eligibilityHi: "अधिसूचित क्षेत्र में अधिसूचित फसल उगाने वाले सभी किसान। कर्ज लेने वाले और बिना कर्ज वाले दोनों।",
-    documents: "Aadhaar card, bank passbook, land records, sowing certificate from patwari or village officer",
-    documentsHi: "आधार कार्ड, बैंक पासबुक, जमीन के कागज, पटवारी या ग्राम अधिकारी से बुवाई प्रमाण पत्र",
-    howToApply: "Apply through your bank (if you have a crop loan, it may be automatic), or at CSC centre, or online at pmfby.gov.in. Apply before the sowing deadline for your season.",
-    howToApplyHi: "अपने बैंक से करें (अगर फसल कर्ज है तो अपने आप हो सकता है), या CSC केंद्र पर, या pmfby.gov.in पर। बुवाई की आखिरी तारीख से पहले करें।",
-    keywords: ["fasal bima", "crop insurance", "pmfby", "insurance", "premium", "crop loss", "flood", "drought", "फसल बीमा", "बीमा"],
+    eligibility:
+      "All farmers growing notified crops in notified areas. Both loanee and non-loanee farmers.",
+    eligibilityHi:
+      "अधिसूचित क्षेत्र में अधिसूचित फसल उगाने वाले सभी किसान। कर्ज लेने वाले और बिना कर्ज वाले दोनों।",
+    documents:
+      "Aadhaar card, bank passbook, land records, sowing certificate from patwari or village officer",
+    documentsHi:
+      "आधार कार्ड, बैंक पासबुक, जमीन के कागज, पटवारी या ग्राम अधिकारी से बुवाई प्रमाण पत्र",
+    howToApply:
+      "Apply through your bank (if you have a crop loan, it may be automatic), or at CSC centre, or online at pmfby.gov.in. Apply before the sowing deadline for your season.",
+    howToApplyHi:
+      "अपने बैंक से करें (अगर फसल कर्ज है तो अपने आप हो सकता है), या CSC केंद्र पर, या pmfby.gov.in पर। बुवाई की आखिरी तारीख से पहले करें।",
+    keywords: [
+      "fasal bima",
+      "crop insurance",
+      "pmfby",
+      "insurance",
+      "premium",
+      "crop loss",
+      "flood",
+      "drought",
+      "फसल बीमा",
+      "बीमा",
+    ],
   },
   {
     name: "Kisan Credit Card (KCC)",
     fullName: "Kisan Credit Card Scheme",
     fullNameHi: "किसान क्रेडिट कार्ड योजना",
-    benefit: "Crop loan up to ₹3 lakh at 4% effective interest (7% with 3% subvention for timely repayment)",
+    benefit:
+      "Crop loan up to ₹3 lakh at 4% effective interest (7% with 3% subvention for timely repayment)",
     benefitHi: "₹3 लाख तक फसल ऋण, समय पर चुकाने पर 4% ब्याज (7% में से 3% सरकार देती है)",
-    eligibility: "All farmers — individual or joint borrowers, tenant farmers, sharecroppers, and SHGs of farmers",
-    eligibilityHi: "सभी किसान — अकेले या संयुक्त, बटाईदार, किरायेदार किसान, और किसान स्वयं सहायता समूह",
-    documents: "Aadhaar card, land papers (ownership or tenancy proof), two passport-size photographs, bank account",
-    documentsHi: "आधार कार्ड, जमीन के कागज (मालिकाना हक या किरायेदारी प्रमाण), दो पासपोर्ट फोटो, बैंक खाता",
-    howToApply: "Apply at your nearest bank branch (any commercial, cooperative, or regional rural bank). PM-KISAN beneficiaries can apply with a simplified one-page form.",
-    howToApplyHi: "नज़दीकी बैंक शाखा में आवेदन करें (कोई भी वाणिज्य, सहकारी या ग्रामीण बैंक)। PM-KISAN लाभार्थी एक पेज के फॉर्म से कर सकते हैं।",
-    keywords: ["kisan credit", "kcc", "crop loan", "loan", "credit card", "interest", "bank loan", "किसान क्रेडिट", "केसीसी", "कर्ज", "ऋण"],
+    eligibility:
+      "All farmers — individual or joint borrowers, tenant farmers, sharecroppers, and SHGs of farmers",
+    eligibilityHi:
+      "सभी किसान — अकेले या संयुक्त, बटाईदार, किरायेदार किसान, और किसान स्वयं सहायता समूह",
+    documents:
+      "Aadhaar card, land papers (ownership or tenancy proof), two passport-size photographs, bank account",
+    documentsHi:
+      "आधार कार्ड, जमीन के कागज (मालिकाना हक या किरायेदारी प्रमाण), दो पासपोर्ट फोटो, बैंक खाता",
+    howToApply:
+      "Apply at your nearest bank branch (any commercial, cooperative, or regional rural bank). PM-KISAN beneficiaries can apply with a simplified one-page form.",
+    howToApplyHi:
+      "नज़दीकी बैंक शाखा में आवेदन करें (कोई भी वाणिज्य, सहकारी या ग्रामीण बैंक)। PM-KISAN लाभार्थी एक पेज के फॉर्म से कर सकते हैं।",
+    keywords: [
+      "kisan credit",
+      "kcc",
+      "crop loan",
+      "loan",
+      "credit card",
+      "interest",
+      "bank loan",
+      "किसान क्रेडिट",
+      "केसीसी",
+      "कर्ज",
+      "ऋण",
+    ],
   },
   {
     name: "PM Awas Yojana – Gramin",
     fullName: "Pradhan Mantri Awas Yojana – Gramin (Rural Housing)",
     fullNameHi: "प्रधानमंत्री आवास योजना – ग्रामीण",
-    benefit: "₹1.20 lakh (plain areas) or ₹1.30 lakh (hilly/difficult areas) for building a pucca house, plus ₹12,000 for toilet under Swachh Bharat",
-    benefitHi: "₹1.20 लाख (मैदानी) या ₹1.30 लाख (पहाड़ी) पक्का घर बनाने के लिए, साथ में ₹12,000 शौचालय के लिए",
-    eligibility: "Houseless families or those living in kutcha/dilapidated houses. Selected from SECC 2011 data, verified by Gram Sabha.",
-    eligibilityHi: "बेघर परिवार या कच्चे/जर्जर घर में रहने वाले। SECC 2011 डेटा से चयन, ग्राम सभा द्वारा सत्यापित।",
-    documents: "Aadhaar card, SECC data inclusion proof, bank account, job card (MGNREGA), photograph of existing house",
-    documentsHi: "आधार कार्ड, SECC डेटा में नाम का प्रमाण, बैंक खाता, जॉब कार्ड (मनरेगा), मौजूदा घर की फोटो",
-    howToApply: "Beneficiaries are identified from SECC data. Check with your Gram Panchayat or Block Development Office. You can also check your name at pmayg.nic.in.",
-    howToApplyHi: "लाभार्थी SECC डेटा से चुने जाते हैं। अपनी ग्राम पंचायत या ब्लॉक विकास कार्यालय से पता करें। pmayg.nic.in पर भी नाम देख सकते हैं।",
+    benefit:
+      "₹1.20 lakh (plain areas) or ₹1.30 lakh (hilly/difficult areas) for building a pucca house, plus ₹12,000 for toilet under Swachh Bharat",
+    benefitHi:
+      "₹1.20 लाख (मैदानी) या ₹1.30 लाख (पहाड़ी) पक्का घर बनाने के लिए, साथ में ₹12,000 शौचालय के लिए",
+    eligibility:
+      "Houseless families or those living in kutcha/dilapidated houses. Selected from SECC 2011 data, verified by Gram Sabha.",
+    eligibilityHi:
+      "बेघर परिवार या कच्चे/जर्जर घर में रहने वाले। SECC 2011 डेटा से चयन, ग्राम सभा द्वारा सत्यापित।",
+    documents:
+      "Aadhaar card, SECC data inclusion proof, bank account, job card (MGNREGA), photograph of existing house",
+    documentsHi:
+      "आधार कार्ड, SECC डेटा में नाम का प्रमाण, बैंक खाता, जॉब कार्ड (मनरेगा), मौजूदा घर की फोटो",
+    howToApply:
+      "Beneficiaries are identified from SECC data. Check with your Gram Panchayat or Block Development Office. You can also check your name at pmayg.nic.in.",
+    howToApplyHi:
+      "लाभार्थी SECC डेटा से चुने जाते हैं। अपनी ग्राम पंचायत या ब्लॉक विकास कार्यालय से पता करें। pmayg.nic.in पर भी नाम देख सकते हैं।",
     keywords: ["awas", "housing", "house", "pmay", "ghar", "pucca", "kutcha", "आवास", "घर", "मकान"],
   },
   {
     name: "Ayushman Bharat (PM-JAY)",
     fullName: "Ayushman Bharat – Pradhan Mantri Jan Arogya Yojana",
     fullNameHi: "आयुष्मान भारत – प्रधानमंत्री जन आरोग्य योजना",
-    benefit: "Free health insurance cover of ₹5 lakh per family per year for secondary and tertiary hospitalisation",
+    benefit:
+      "Free health insurance cover of ₹5 lakh per family per year for secondary and tertiary hospitalisation",
     benefitHi: "हर परिवार को ₹5 लाख तक का मुफ्त इलाज, हर साल, सरकारी और प्राइवेट अस्पतालों में",
-    eligibility: "Families identified in SECC 2011 (deprived categories) and all families with NFSA ration cards. No age, family size, or pre-existing disease limit.",
-    eligibilityHi: "SECC 2011 में शामिल परिवार और NFSA राशन कार्ड वाले सभी परिवार। उम्र, परिवार के आकार या पुरानी बीमारी की कोई सीमा नहीं।",
-    documents: "Aadhaar card, ration card, any government ID. You can check eligibility by calling 14555 or visiting mera.pmjay.gov.in.",
-    documentsHi: "आधार कार्ड, राशन कार्ड, कोई भी सरकारी पहचान पत्र। पात्रता जांचने के लिए 14555 पर कॉल करें या mera.pmjay.gov.in देखें।",
-    howToApply: "Visit any empanelled hospital or Ayushman Mitra at a government hospital. You can also visit your nearest CSC to get your Ayushman card made.",
-    howToApplyHi: "किसी भी सूचीबद्ध अस्पताल में जाएं या सरकारी अस्पताल में आयुष्मान मित्र से मिलें। नज़दीकी CSC में आयुष्मान कार्ड बनवा सकते हैं।",
-    keywords: ["ayushman", "health insurance", "hospital", "jan arogya", "medical", "health card", "pmjay", "5 lakh", "आयुष्मान", "इलाज"],
+    eligibility:
+      "Families identified in SECC 2011 (deprived categories) and all families with NFSA ration cards. No age, family size, or pre-existing disease limit.",
+    eligibilityHi:
+      "SECC 2011 में शामिल परिवार और NFSA राशन कार्ड वाले सभी परिवार। उम्र, परिवार के आकार या पुरानी बीमारी की कोई सीमा नहीं।",
+    documents:
+      "Aadhaar card, ration card, any government ID. You can check eligibility by calling 14555 or visiting mera.pmjay.gov.in.",
+    documentsHi:
+      "आधार कार्ड, राशन कार्ड, कोई भी सरकारी पहचान पत्र। पात्रता जांचने के लिए 14555 पर कॉल करें या mera.pmjay.gov.in देखें।",
+    howToApply:
+      "Visit any empanelled hospital or Ayushman Mitra at a government hospital. You can also visit your nearest CSC to get your Ayushman card made.",
+    howToApplyHi:
+      "किसी भी सूचीबद्ध अस्पताल में जाएं या सरकारी अस्पताल में आयुष्मान मित्र से मिलें। नज़दीकी CSC में आयुष्मान कार्ड बनवा सकते हैं।",
+    keywords: [
+      "ayushman",
+      "health insurance",
+      "hospital",
+      "jan arogya",
+      "medical",
+      "health card",
+      "pmjay",
+      "5 lakh",
+      "आयुष्मान",
+      "इलाज",
+    ],
   },
   {
     name: "MGNREGA",
     fullName: "Mahatma Gandhi National Rural Employment Guarantee Act",
     fullNameHi: "महात्मा गांधी राष्ट्रीय ग्रामीण रोज़गार गारंटी अधिनियम (मनरेगा)",
-    benefit: "100 days of guaranteed wage employment per year per rural household. Daily wage varies by state (₹230–350 approx).",
-    benefitHi: "हर ग्रामीण परिवार को साल में 100 दिन का रोज़गार गारंटी। दैनिक मज़दूरी राज्य के अनुसार (लगभग ₹230–350)।",
-    eligibility: "Any adult member of a rural household willing to do unskilled manual work. No income or land criteria.",
-    eligibilityHi: "गांव के किसी भी वयस्क सदस्य के लिए जो मज़दूरी करना चाहता है। आय या जमीन की कोई शर्त नहीं।",
-    documents: "Job card (apply at Gram Panchayat with Aadhaar, photograph, and address proof). If you don't have a job card, apply for one first.",
-    documentsHi: "जॉब कार्ड (ग्राम पंचायत में आधार, फोटो और पते के प्रमाण से बनवाएं)। अगर जॉब कार्ड नहीं है तो पहले वो बनवाएं।",
-    howToApply: "Submit a written application to the Gram Panchayat demanding work. They must provide work within 15 days or pay unemployment allowance.",
-    howToApplyHi: "ग्राम पंचायत में काम की मांग का लिखित आवेदन दें। उन्हें 15 दिन में काम देना होगा या बेरोज़गारी भत्ता देना होगा।",
-    keywords: ["nrega", "mgnrega", "mnrega", "job card", "employment guarantee", "100 days", "wage", "manual work", "rozgar", "नरेगा", "मनरेगा", "रोज़गार", "मज़दूरी", "जॉब कार्ड"],
+    benefit:
+      "100 days of guaranteed wage employment per year per rural household. Daily wage varies by state (₹230–350 approx).",
+    benefitHi:
+      "हर ग्रामीण परिवार को साल में 100 दिन का रोज़गार गारंटी। दैनिक मज़दूरी राज्य के अनुसार (लगभग ₹230–350)।",
+    eligibility:
+      "Any adult member of a rural household willing to do unskilled manual work. No income or land criteria.",
+    eligibilityHi:
+      "गांव के किसी भी वयस्क सदस्य के लिए जो मज़दूरी करना चाहता है। आय या जमीन की कोई शर्त नहीं।",
+    documents:
+      "Job card (apply at Gram Panchayat with Aadhaar, photograph, and address proof). If you don't have a job card, apply for one first.",
+    documentsHi:
+      "जॉब कार्ड (ग्राम पंचायत में आधार, फोटो और पते के प्रमाण से बनवाएं)। अगर जॉब कार्ड नहीं है तो पहले वो बनवाएं।",
+    howToApply:
+      "Submit a written application to the Gram Panchayat demanding work. They must provide work within 15 days or pay unemployment allowance.",
+    howToApplyHi:
+      "ग्राम पंचायत में काम की मांग का लिखित आवेदन दें। उन्हें 15 दिन में काम देना होगा या बेरोज़गारी भत्ता देना होगा।",
+    keywords: [
+      "nrega",
+      "mgnrega",
+      "mnrega",
+      "job card",
+      "employment guarantee",
+      "100 days",
+      "wage",
+      "manual work",
+      "rozgar",
+      "नरेगा",
+      "मनरेगा",
+      "रोज़गार",
+      "मज़दूरी",
+      "जॉब कार्ड",
+    ],
   },
 ];
 
@@ -271,25 +373,29 @@ interface AgriRule {
 const AGRI_RULES: AgriRule[] = [
   {
     key: "yellow-leaves",
-    match: /yellow\s*(leaf|leaves)|leaf.*yellow|leaves.*yellow|turn.*yellow|पत्ते.*पीले|पीले.*पत्ते|पत्ती.*पीली|पत्तियां.*पीली|पत्तियाँ.*पीली|पीला\s*पड़|पीले\s*हो|पिवळे.*पाने|पाने.*पिवळे/i,
+    match:
+      /yellow\s*(leaf|leaves)|leaf.*yellow|leaves.*yellow|turn.*yellow|पत्ते.*पीले|पीले.*पत्ते|पत्ती.*पीली|पत्तियां.*पीली|पत्तियाँ.*पीली|पीला\s*पड़|पीले\s*हो|पिवळे.*पाने|पाने.*पिवळे/i,
   },
   {
     key: "pest",
-    match: /pest|insect|worm|caterpillar|borer|aphid|whitefly|mite|कीड़ा|कीड़े|कीट|इल्ली|माहू|सफेद\s*मक्खी|कीड|किडे|अळी/i,
+    match:
+      /pest|insect|worm|caterpillar|borer|aphid|whitefly|mite|कीड़ा|कीड़े|कीट|इल्ली|माहू|सफेद\s*मक्खी|कीड|किडे|अळी/i,
     clarifyEn: "Which crop is affected and what do the insects look like?",
     clarifyHi: "कौन सी फसल में कीड़े लगे हैं और कीड़े कैसे दिखते हैं?",
     clarifyMr: "कोणत्या पिकावर किडे आहेत आणि किडे कसे दिसतात?",
   },
   {
     key: "irrigation",
-    match: /water(ing)?|irrigat|when\s*(to|should)\s*water|how\s*much\s*water|सिंचाई|पानी\s*दे|पानी\s*कब|पानी\s*कितना|पाणी\s*द्या|पाणी\s*कधी|सिंचन/i,
+    match:
+      /water(ing)?|irrigat|when\s*(to|should)\s*water|how\s*much\s*water|सिंचाई|पानी\s*दे|पानी\s*कब|पानी\s*कितना|पाणी\s*द्या|पाणी\s*कधी|सिंचन/i,
     clarifyEn: "What crop are you growing and what is your irrigation method?",
     clarifyHi: "आप कौन सी फसल उगा रहे हैं और पानी कैसे देते हैं?",
     clarifyMr: "तुम्ही कोणते पीक घेत आहात आणि पाणी कसे देता?",
   },
   {
     key: "fertilizer",
-    match: /fertili[sz]|urea|dap|npk|compost|manure|nutrient|खाद|यूरिया|डीएपी|उर्वरक|गोबर|कम्पोस्ट|खत|युरिया|कंपोस्ट|शेणखत/i,
+    match:
+      /fertili[sz]|urea|dap|npk|compost|manure|nutrient|खाद|यूरिया|डीएपी|उर्वरक|गोबर|कम्पोस्ट|खत|युरिया|कंपोस्ट|शेणखत/i,
   },
   {
     key: "soil",
@@ -298,13 +404,15 @@ const AGRI_RULES: AgriRule[] = [
   {
     key: "disease",
     match: /disease|blight|rust|wilt|rot|mildew|fungus|fungi|रोग|बीमारी|फफूंद|करपा|बुरशी/i,
-    clarifyEn: "Can you describe the symptoms — colour of spots, which part of the plant, how fast it is spreading?",
+    clarifyEn:
+      "Can you describe the symptoms — colour of spots, which part of the plant, how fast it is spreading?",
     clarifyHi: "लक्षण बताइए — धब्बों का रंग, पौधे का कौन सा हिस्सा, और कितनी तेजी से फैल रहा है?",
     clarifyMr: "लक्षणे सांगा — डागांचा रंग, रोपाचा कोणता भाग, आणि किती वेगाने पसरत आहे?",
   },
   {
     key: "sowing",
-    match: /sow|plant|seed|nursery|transplant|when\s*to\s*(sow|plant)|season|बुवाई|बीज|पौध|रोपाई|पेरणी|बियाणे|रोपे/i,
+    match:
+      /sow|plant|seed|nursery|transplant|when\s*to\s*(sow|plant)|season|बुवाई|बीज|पौध|रोपाई|पेरणी|बियाणे|रोपे/i,
     clarifyEn: "Which crop and in which season?",
     clarifyHi: "कौन सी फसल और किस मौसम में?",
     clarifyMr: "कोणते पीक आणि कोणत्या हंगामात?",
@@ -340,7 +448,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• सेंद्रिय पर्याय: कडुनिंबाचे तेल 5 मिली प्रति लिटर, आठवड्यातून दोनदा\n\n" +
       "5 दिवसांनंतरही डाग वाढत असतील तर जवळच्या कृषी विज्ञान केंद्रात (KVK) तपासणी करा.",
   },
-  "pest": {
+  pest: {
     en:
       "For general pest issues on crops:\n\n" +
       "• First try neem oil spray (5 ml per litre water) — safe and organic\n" +
@@ -363,7 +471,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• फुलोरा आल्यावर फवारणी करू नका\n\n" +
       "कोणत्या पिकावर किडे आहेत आणि कसे दिसतात ते सांगा.",
   },
-  "irrigation": {
+  irrigation: {
     en:
       "General irrigation tips for Indian conditions:\n\n" +
       "• Water early morning (before 8 AM) or late evening — less evaporation\n" +
@@ -389,7 +497,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• ठिबक सिंचनाने 40-60% पाणी वाचते\n\n" +
       "तुम्ही कोणते पीक घेत आहात?",
   },
-  "fertilizer": {
+  fertilizer: {
     en:
       "Balanced nutrition is key:\n\n" +
       "• Get a soil test first — your KVK does it for ₹50-100\n" +
@@ -415,7 +523,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• पानांवर पांढरे पट्टे असतील तर जस्त सल्फेट (10 किलो/एकर)\n\n" +
       "सेंद्रिय पर्याय: गांडूळखत (2 टन/एकर) + दर 15 दिवसांनी जीवामृत.",
   },
-  "soil": {
+  soil: {
     en:
       "Healthy soil is the foundation of good farming:\n\n" +
       "• Get your soil tested at the nearest KVK or soil testing lab — costs ₹50-100\n" +
@@ -441,7 +549,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• हिरवळीचे खत पिके (ताग, धैंचा) फेरपालटीत घ्या\n\n" +
       "तुमचे माती आरोग्य कार्ड तालुका कृषी कार्यालयात उपलब्ध असायला हवे.",
   },
-  "disease": {
+  disease: {
     en:
       "For crop diseases:\n\n" +
       "• Remove and destroy infected plant parts immediately\n" +
@@ -467,7 +575,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• सेंद्रिय: ट्रायकोडर्मा (मातीत) + स्यूडोमोनास (बीज प्रक्रिया)\n\n" +
       "अचूक ओळखीसाठी जवळच्या KVK ला भेट द्या.",
   },
-  "sowing": {
+  sowing: {
     en:
       "Timing depends on your region and crop:\n\n" +
       "• Kharif (monsoon) sowing: June–July (rice, maize, soybean, cotton)\n" +
@@ -498,7 +606,7 @@ const AGRI_RESPONSES: Record<string, { en: string; hi: string; mr: string }> = {
       "• पेरणीपूर्वी बियाणे बुरशीनाशक (थिरम 2 ग्रॅम/किलो) ने उपचारित करा\n\n" +
       "तुम्ही कोणते पीक घेणार आहात?",
   },
-  "harvest": {
+  harvest: {
     en:
       "Harvesting at the right time is important for quality and price:\n\n" +
       "• Wheat: when grains become hard and straw turns golden (about 120-150 days)\n" +
@@ -553,16 +661,14 @@ const AGRI_GENERIC: { en: string; hi: string; mr: string } = {
     "कोणते पीक आहे आणि काय समस्या दिसत आहे ते सांगा.",
 };
 
-export function askNexusFarm(
-  userMessage: string,
-  language: string,
-): AgentResponse {
+export function askNexusFarm(userMessage: string, language: string): AgentResponse {
   const lang = langKeyFromName(language);
   const rule = AGRI_RULES.find((r) => r.match.test(userMessage));
 
   if (rule && AGRI_RESPONSES[rule.key]) {
-    const resp = AGRI_RESPONSES[rule.key];
-    const clarify = lang === "hi" ? rule.clarifyHi : lang === "mr" ? rule.clarifyMr : rule.clarifyEn;
+    const resp = AGRI_RESPONSES[rule.key]!;
+    const clarify =
+      lang === "hi" ? rule.clarifyHi : lang === "mr" ? rule.clarifyMr : rule.clarifyEn;
 
     return {
       answer: pick(lang, resp.en, resp.hi, resp.mr),
@@ -589,23 +695,26 @@ export function askNexusFarm(
 
 // ─── Government Schemes Agent ───────────────────────────────────────
 
-export function askNexusSchemes(
-  userMessage: string,
-  language: string,
-): AgentResponse {
+export function askNexusSchemes(userMessage: string, language: string): AgentResponse {
   const lang = langKeyFromName(language);
   const lower = userMessage.toLowerCase();
 
   // Check if asking about a specific scheme
-  const matchedSchemes = SCHEMES_DATA.filter((s) =>
-    s.keywords.some((kw) => lower.includes(kw) || userMessage.includes(kw)) ||
-    lower.includes(s.name.toLowerCase()),
+  const matchedSchemes = SCHEMES_DATA.filter(
+    (s) =>
+      s.keywords.some((kw) => lower.includes(kw) || userMessage.includes(kw)) ||
+      lower.includes(s.name.toLowerCase()),
   );
 
   if (matchedSchemes.length > 0) {
-    const isDocQuestion = /document|paper|what\s*(do\s*i\s*)?need|दस्तावेज|दस्तावेज़|कागज|कागदपत्रे/i.test(userMessage);
-    const isEligQuestion = /eligib|can\s*i|qualify|who\s*can|पात्रता|कौन.*पात्र|कोण.*पात्र/i.test(userMessage);
-    const isHowQuestion = /how\s*to|apply|where|process|step|कैसे.*करें|अर्ज.*कसा|आवेदन/i.test(userMessage);
+    const isDocQuestion =
+      /document|paper|what\s*(do\s*i\s*)?need|दस्तावेज|दस्तावेज़|कागज|कागदपत्रे/i.test(userMessage);
+    const isEligQuestion = /eligib|can\s*i|qualify|who\s*can|पात्रता|कौन.*पात्र|कोण.*पात्र/i.test(
+      userMessage,
+    );
+    const isHowQuestion = /how\s*to|apply|where|process|step|कैसे.*करें|अर्ज.*कसा|आवेदन/i.test(
+      userMessage,
+    );
 
     const parts = matchedSchemes.map((s) => {
       const name = lang === "en" ? s.fullName : (s.fullNameHi ?? s.fullName);
@@ -645,9 +754,12 @@ export function askNexusSchemes(
   }
 
   // General schemes query
-  const isSmallFarmer = /small|marginal|poor|little|kam|chhota|छोटा|छोटे|गरीब|लहान|अल्पभूधारक/i.test(userMessage);
+  const isSmallFarmer =
+    /small|marginal|poor|little|kam|chhota|छोटा|छोटे|गरीब|लहान|अल्पभूधारक/i.test(userMessage);
   const relevant = isSmallFarmer
-    ? SCHEMES_DATA.filter((s) => ["PM-KISAN", "PMFBY", "Kisan Credit Card (KCC)", "MGNREGA"].includes(s.name))
+    ? SCHEMES_DATA.filter((s) =>
+        ["PM-KISAN", "PMFBY", "Kisan Credit Card (KCC)", "MGNREGA"].includes(s.name),
+      )
     : SCHEMES_DATA.slice(0, 4);
 
   const overview = relevant
@@ -682,10 +794,7 @@ export function askNexusSchemes(
 
 // ─── General Agent ──────────────────────────────────────────────────
 
-export function askNexusGeneral(
-  userMessage: string,
-  language: string,
-): AgentResponse {
+export function askNexusGeneral(userMessage: string, language: string): AgentResponse {
   const lang = langKeyFromName(language);
 
   // "Coming soon" categories
@@ -704,7 +813,11 @@ export function askNexusGeneral(
     };
   }
 
-  if (/health|fever|pain|doctor|medicine|sick|hospital|pregnan|vaccin|स्वास्थ्य|बुखार|दर्द|दवाई|बीमार|अस्पताल|आरोग्य|ताप|वेदना/i.test(userMessage)) {
+  if (
+    /health|fever|pain|doctor|medicine|sick|hospital|pregnan|vaccin|स्वास्थ्य|बुखार|दर्द|दवाई|बीमार|अस्पताल|आरोग्य|ताप|वेदना/i.test(
+      userMessage,
+    )
+  ) {
     return {
       answer: pick(
         lang,
@@ -734,7 +847,11 @@ export function askNexusGeneral(
     };
   }
 
-  if (/study|homework|school|exam|math|learn|education|scholar|पढ़ाई|होमवर्क|स्कूल|परीक्षा|शिक्षा|अभ्यास|शाळा/i.test(userMessage)) {
+  if (
+    /study|homework|school|exam|math|learn|education|scholar|पढ़ाई|होमवर्क|स्कूल|परीक्षा|शिक्षा|अभ्यास|शाळा/i.test(
+      userMessage,
+    )
+  ) {
     return {
       answer: pick(
         lang,
@@ -754,9 +871,9 @@ export function askNexusGeneral(
     return {
       answer: pick(
         lang,
-        "Here is a short story for you:\n\nA farmer once planted one mango seed. His neighbour laughed — \"One tree? What will you do with just one tree?\"\n\nThe farmer smiled and said, \"One tree gives shade, fruit, and wood. But more importantly, each fruit has a seed, and each seed can become a tree.\"\n\nYears later, the farmer had an orchard from that one seed. The neighbour asked his secret. The farmer said, \"I just started. That was the hardest part.\"\n\nIs there anything I can help you with — about farming, government schemes, or anything else?",
-        "आपके लिए एक छोटी कहानी:\n\nएक किसान ने एक आम का बीज लगाया। पड़ोसी ने हंसकर कहा — \"एक पेड़? एक पेड़ से क्या होगा?\"\n\nकिसान मुस्कुराया और बोला, \"एक पेड़ छाया देता है, फल देता है, लकड़ी देता है। और सबसे बड़ी बात, हर फल में बीज होता है, और हर बीज एक पेड़ बन सकता है।\"\n\nकई साल बाद, उस एक बीज से किसान का पूरा बाग तैयार हो गया। पड़ोसी ने पूछा, \"तुम्हारा राज़ क्या है?\" किसान बोला, \"मैंने बस शुरू किया। यही सबसे मुश्किल हिस्सा था।\"\n\nक्या मैं किसी और चीज़ में मदद कर सकता हूँ — खेती, सरकारी योजनाएं, या कुछ और?",
-        "तुमच्यासाठी एक छोटी गोष्ट:\n\nएका शेतकऱ्याने एक आंब्याचे बी लावले. शेजाऱ्याने हसून म्हणाला — \"एक झाड? एका झाडाचे काय होणार?\"\n\nशेतकरी हसला आणि म्हणाला, \"एक झाड सावली देते, फळ देते, लाकूड देते. आणि सर्वात मोठी गोष्ट, प्रत्येक फळात बी असते, आणि प्रत्येक बी एक झाड होऊ शकते.\"\n\nअनेक वर्षांनी, त्या एका बीपासून शेतकऱ्याची संपूर्ण बाग तयार झाली. शेजाऱ्याने विचारले, \"तुमचे रहस्य काय?\" शेतकरी म्हणाला, \"मी फक्त सुरुवात केली. तोच सर्वात कठीण भाग होता.\"\n\nमी आणखी कशात मदत करू शकतो — शेती, सरकारी योजना, किंवा इतर काही?",
+        'Here is a short story for you:\n\nA farmer once planted one mango seed. His neighbour laughed — "One tree? What will you do with just one tree?"\n\nThe farmer smiled and said, "One tree gives shade, fruit, and wood. But more importantly, each fruit has a seed, and each seed can become a tree."\n\nYears later, the farmer had an orchard from that one seed. The neighbour asked his secret. The farmer said, "I just started. That was the hardest part."\n\nIs there anything I can help you with — about farming, government schemes, or anything else?',
+        'आपके लिए एक छोटी कहानी:\n\nएक किसान ने एक आम का बीज लगाया। पड़ोसी ने हंसकर कहा — "एक पेड़? एक पेड़ से क्या होगा?"\n\nकिसान मुस्कुराया और बोला, "एक पेड़ छाया देता है, फल देता है, लकड़ी देता है। और सबसे बड़ी बात, हर फल में बीज होता है, और हर बीज एक पेड़ बन सकता है।"\n\nकई साल बाद, उस एक बीज से किसान का पूरा बाग तैयार हो गया। पड़ोसी ने पूछा, "तुम्हारा राज़ क्या है?" किसान बोला, "मैंने बस शुरू किया। यही सबसे मुश्किल हिस्सा था।"\n\nक्या मैं किसी और चीज़ में मदद कर सकता हूँ — खेती, सरकारी योजनाएं, या कुछ और?',
+        'तुमच्यासाठी एक छोटी गोष्ट:\n\nएका शेतकऱ्याने एक आंब्याचे बी लावले. शेजाऱ्याने हसून म्हणाला — "एक झाड? एका झाडाचे काय होणार?"\n\nशेतकरी हसला आणि म्हणाला, "एक झाड सावली देते, फळ देते, लाकूड देते. आणि सर्वात मोठी गोष्ट, प्रत्येक फळात बी असते, आणि प्रत्येक बी एक झाड होऊ शकते."\n\nअनेक वर्षांनी, त्या एका बीपासून शेतकऱ्याची संपूर्ण बाग तयार झाली. शेजाऱ्याने विचारले, "तुमचे रहस्य काय?" शेतकरी म्हणाला, "मी फक्त सुरुवात केली. तोच सर्वात कठीण भाग होता."\n\nमी आणखी कशात मदत करू शकतो — शेती, सरकारी योजना, किंवा इतर काही?',
       ),
       needsClarification: false,
       clarifyingQuestion: null,
@@ -786,10 +903,7 @@ export function askNexusGeneral(
  * Process a user message end-to-end: classify intent → dispatch to agent → return response.
  * The `language` parameter determines the response language.
  */
-export function processQuery(
-  userMessage: string,
-  language: string,
-): AgentResponse {
+export function processQuery(userMessage: string, language: string): AgentResponse {
   const { agentId } = routeQuery(userMessage, language);
 
   switch (agentId) {

@@ -33,7 +33,10 @@ const contacts = [
 
 const firstAid = [
   ["Bleeding", "Press firmly with a clean cloth for 10 minutes. Do not lift to check."],
-  ["Snake bite", "Keep the person still and lying down. Do not cut or suck the wound. Reach a hospital fast."],
+  [
+    "Snake bite",
+    "Keep the person still and lying down. Do not cut or suck the wound. Reach a hospital fast.",
+  ],
   ["Burns", "Cool under running water for 20 minutes. No oil, no ice, no toothpaste."],
   ["Unconscious", "Turn on the side, clear the mouth, check breathing, call 108."],
 ];
@@ -52,7 +55,11 @@ function speakNumber(number: string) {
 
 function Emergency() {
   return (
-    <FeatureShell emoji="🚨" title="Emergency SOS" subtitle="Helplines & first aid — no internet needed">
+    <FeatureShell
+      emoji="🚨"
+      title="Emergency SOS"
+      subtitle="Helplines & first aid — no internet needed"
+    >
       {/* Emergency contacts — red/orange accent grid */}
       <div className="grid grid-cols-2 gap-3">
         {contacts.map((c, i) => (
@@ -62,12 +69,11 @@ function Emergency() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
             className="relative overflow-hidden rounded-3xl shadow-soft"
-            style={{ background: "linear-gradient(135deg, oklch(0.95 0.06 25), oklch(0.97 0.03 40))" }}
+            style={{
+              background: "linear-gradient(135deg, oklch(0.95 0.06 25), oklch(0.97 0.03 40))",
+            }}
           >
-            <a
-              href={`tel:${c.number}`}
-              className="flex items-center gap-3 p-4"
-            >
+            <a href={`tel:${c.number}`} className="flex items-center gap-3 p-4">
               <span className="grid size-10 place-items-center rounded-full bg-white/80 text-lg shadow-sm">
                 {c.emoji}
               </span>
@@ -78,7 +84,10 @@ function Emergency() {
             </a>
             {/* Speaker button — reads number aloud */}
             <button
-              onClick={(e) => { e.preventDefault(); speakNumber(c.number); }}
+              onClick={(e) => {
+                e.preventDefault();
+                speakNumber(c.number);
+              }}
               aria-label={`Read ${c.label} number aloud`}
               className="absolute right-2 top-2 grid size-7 place-items-center rounded-full bg-white/60 text-red-700 transition-colors hover:bg-white/90"
             >

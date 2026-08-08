@@ -25,39 +25,32 @@ export function useTts() {
    * Find the best matching voice for a language code.
    * Falls back to any available voice.
    */
-  const findVoice = useCallback(
-    (langCode: string): SpeechSynthesisVoice | null => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length === 0) return null;
+  const findVoice = useCallback((langCode: string): SpeechSynthesisVoice | null => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) return null;
 
-      const langInfo = SUPPORTED_LANGUAGES[langCode];
-      const speechCode = langInfo?.speechCode ?? `${langCode}-IN`;
+    const langInfo = SUPPORTED_LANGUAGES[langCode];
+    const speechCode = langInfo?.speechCode ?? `${langCode}-IN`;
 
-      // Exact match
-      let voice = voices.find(
-        (v) => v.lang.toLowerCase() === speechCode.toLowerCase(),
-      );
-      if (voice) return voice;
+    // Exact match
+    let voice = voices.find((v) => v.lang.toLowerCase() === speechCode.toLowerCase());
+    if (voice) return voice;
 
-      // Prefix match (e.g. "hi" matches "hi-IN")
-      voice = voices.find((v) =>
-        v.lang.toLowerCase().startsWith(langCode.toLowerCase()),
-      );
-      if (voice) return voice;
+    // Prefix match (e.g. "hi" matches "hi-IN")
+    voice = voices.find((v) => v.lang.toLowerCase().startsWith(langCode.toLowerCase()));
+    if (voice) return voice;
 
-      // Try English Indian
-      voice = voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
-      if (voice) return voice;
+    // Try English Indian
+    voice = voices.find((v) => v.lang.toLowerCase().startsWith("en-in"));
+    if (voice) return voice;
 
-      // Try any English
-      voice = voices.find((v) => v.lang.toLowerCase().startsWith("en"));
-      if (voice) return voice;
+    // Try any English
+    voice = voices.find((v) => v.lang.toLowerCase().startsWith("en"));
+    if (voice) return voice;
 
-      // Return first available
-      return voices[0] ?? null;
-    },
-    [],
-  );
+    // Return first available
+    return voices[0] ?? null;
+  }, []);
 
   /**
    * Speak text aloud. Auto-selects voice based on language.

@@ -85,8 +85,8 @@ export function Orb({
 
   // Agent-specific visuals
   const agentKey = activeAgent ?? "general";
-  const haloGradient = AGENT_HALOS[agentKey] ?? AGENT_HALOS.general;
-  const accentLine = AGENT_ACCENTS[agentKey] ?? AGENT_ACCENTS.general;
+  const haloGradient = AGENT_HALOS[agentKey] ?? AGENT_HALOS["general"]!;
+  const accentLine = AGENT_ACCENTS[agentKey] ?? AGENT_ACCENTS["general"]!;
 
   // Show stop affordance when in active state and interactive
   const isActive = ["listening", "thinking", "processing", "speaking"].includes(effectivePhase);
@@ -183,4 +183,3 @@ export function Orb({
     </Root>
   );
 }
-
